@@ -1,15 +1,15 @@
-import os
+import subprocess
 
-def install_xclip():
-    if os.system("which xclip") != 0:
-        os.system("apt-get update")
-        os.system("apt-get install -y xclip")
+# 필요한 패키지 설치하기
+def install_packages():
+    subprocess.run(["apt-get", "update"])
+    subprocess.run(["apt-get", "install", "-y", "xclip"])
 
-install_xclip()
+# 설치 함수 호출
+install_packages()
 
 
 import streamlit as st
-import pyperclip
 #from PIL import Image
 #import time
 
