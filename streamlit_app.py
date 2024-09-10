@@ -1,4 +1,15 @@
+import os
+
+def install_xclip():
+    if os.system("which xclip") != 0:
+        os.system("apt-get update")
+        os.system("apt-get install -y xclip")
+
+install_xclip()
+
+
 import streamlit as st
+import pyperclip
 #from PIL import Image
 #import time
 
@@ -12,7 +23,7 @@ import requests
 def init_backend():
     # 서버가 정상이면 200 을 리턴
     if ("init_backend" not in st.session_state) or st.session_state.init_backend != 200:
-        #st.session_state.backend_url = "http://127.0.0.1:8000/"
+        #st.session_state.backend_url = "http://127.0.0.1:8000/"        
         st.session_state.backend_url = st.secrets["my_url"]
         result = requests.post(url=f"{st.session_state.backend_url}init")
         print(f"init_backend: {result}")    # type: requests.models.Response
@@ -48,7 +59,7 @@ CATEGORIES = [None, "법률 QnA", "서류작성"]
 def init_global_var():
     st.session_state.job = None
     st.session_state.hide_main_side = False
-    
+        
     st.session_state.result_answer = ""
     st.session_state.result_answer_post = ""
     st.session_state.result_relevance = False
@@ -65,6 +76,120 @@ def init_global_var():
     st.session_state.disable_write_paper_5 = 0
     st.session_state.disable_write_paper_6 = 0
     
+    if "user_question" in st.session_state:
+        st.session_state.user_question = ""
+        
+    if "user_input_status" in st.session_state:
+        st.session_state.user_input_status = ""
+        
+    if "user_input_question" in st.session_state:
+        st.session_state.user_input_question = ""
+        
+    if "user_input_reason" in st.session_state:
+        st.session_state.user_input_reason = ""
+        
+    if "user_input_fact" in st.session_state:
+        st.session_state.user_input_fact = ""
+        
+    if "user_input_ask" in st.session_state:
+        st.session_state.user_input_ask = ""
+        
+    if "user_input_point" in st.session_state:
+        st.session_state.user_input_point = ""
+        
+    if "user_input_sender" in st.session_state:
+        st.session_state.user_input_sender = ""
+        
+    if "user_input_phone" in st.session_state:
+        st.session_state.user_input_phone = ""
+        
+    if "user_input_receiver" in st.session_state:
+        st.session_state.user_input_receiver = ""
+        
+    if "user_input_appendix" in st.session_state:
+        st.session_state.user_input_appendix = ""
+        
+    if "user_input_style" in st.session_state:
+        st.session_state.user_input_style = ""
+        
+    if "user_input_sender_name" in st.session_state:
+        st.session_state.user_input_sender_name = ""
+        
+    if "user_input_receiver_name" in st.session_state:
+        st.session_state.user_input_receiver_name = ""
+        
+    if "user_input_court" in st.session_state:
+        st.session_state.user_input_court = ""
+        
+    if "user_input_ask_amount" in st.session_state:
+        st.session_state.user_input_ask_amount = 0
+        
+    if "user_input_ask_interest" in st.session_state:
+        st.session_state.user_input_ask_interest = ""
+        
+    if "user_input_ask_transmittal_fee" in st.session_state:
+        st.session_state.user_input_ask_transmittal_fee = 0
+        
+    if "user_input_ask_stamp_fee" in st.session_state:
+        st.session_state.user_input_ask_stamp_fee = 0
+        
+    if "user_input_ask_reason" in st.session_state:
+        st.session_state.user_input_ask_reason = ""
+        
+    if "user_input_ask_reason_detail" in st.session_state:
+        st.session_state.user_input_ask_reason_detail = ""
+        
+    if "user_input_case_no" in st.session_state:
+        st.session_state.user_input_case_no = ""
+        
+    if "user_input_case_name" in st.session_state:
+        st.session_state.user_input_case_name = ""
+        
+    if "user_input_case_purpose" in st.session_state:
+        st.session_state.user_input_case_purpose = ""
+        
+    if "user_input_case_cause" in st.session_state:
+        st.session_state.user_input_case_cause = ""
+        
+    if "user_input_case_prove" in st.session_state:
+        st.session_state.user_input_case_prove = ""
+        
+    if "user_input_case_appendix" in st.session_state:
+        st.session_state.user_input_case_appendix = ""
+        
+    if "user_input_case_court" in st.session_state:
+        st.session_state.user_input_case_court = ""
+        
+    if "user_input_rebut" in st.session_state:
+        st.session_state.user_input_rebut = ""
+        
+    if "user_input_add_info" in st.session_state:
+        st.session_state.user_input_add_info = ""
+        
+    if "user_input_receiver_etc" in st.session_state:
+        st.session_state.user_input_receiver_etc = ""
+        
+    if "user_input_purpose" in st.session_state:
+        st.session_state.user_input_purpose = ""
+        
+    if "user_input_crime_time" in st.session_state:
+        st.session_state.user_input_crime_time = ""
+        
+    if "user_input_crime_history" in st.session_state:
+        st.session_state.user_input_crime_history = ""
+        
+    if "user_input_damage" in st.session_state:
+        st.session_state.user_input_damage = ""
+        
+    if "user_input_evidence" in st.session_state:
+        st.session_state.user_input_evidence = ""
+        
+    if "user_input_etc_accuse" in st.session_state:
+        st.session_state.user_input_etc_accuse = ""
+        
+    if "user_input_station" in st.session_state:
+        st.session_state.user_input_station = ""
+
 
 # 첫 페이지
 def start_task():

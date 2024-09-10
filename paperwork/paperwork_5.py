@@ -77,20 +77,20 @@ expander.caption("* [경찰 민원포털] 저작권 정책상 URL을 알려드�
 
 # 입력 사항
 if st.session_state.disable_write_paper_5 == 0:
-    user_input_sender_name = st.text_input(label='고소인 이름을 입력 하세요.', max_chars=20, placeholder="예) 임꺽정")
-    user_input_receiver_name = st.text_input(label='피고소인 이름을 입력 하세요.', max_chars=20, placeholder="예) 홍길동")
-    user_input_receiver_etc = st.text_area(label='피고소인과 관련된 기타 사항이 있다면 입력 하세요.', max_chars=200, placeholder="예) 고소인과의 관계, 성별, 외모 특징 등")
+    st.text_input(label='고소인 이름을 입력 하세요.', max_chars=20, key='user_input_sender_name', placeholder="예) 임꺽정")
+    st.text_input(label='피고소인 이름을 입력 하세요.', max_chars=20, key='user_input_receiver_name', placeholder="예) 홍길동")
+    st.text_area(label='피고소인과 관련된 기타 사항이 있다면 입력 하세요.', max_chars=200, key='user_input_receiver_etc', placeholder="예) 고소인과의 관계, 성별, 외모 특징 등")
     st.caption("기타사항에는 고소인과의 관계나 피고소인의 인적사항과 연락처를 정확히 알 수 없을 경우 성별, 외모 특징, 인상착의 등을 구체적으로 기재하세요. 여러가지라면 콤마(,)로 구분하여 넣으세요.")
     st.text("")
     
-    user_input_purpose = st.text_input(label='어떤 범죄(죄목)로 고소할 것인지 입력 하세요.', max_chars=100, placeholder="예) 사기죄")
-    user_input_crime_time = st.text_input(label='사건이 일어난 일시와 장소를 입력 하세요.', max_chars=50, placeholder="예) 2023년 4월 5일. 서울 강남구 XXX앞")
-    user_input_crime_history = st.text_area(label='사건이 일어났을 때의 정황을 설명해 주세요.', max_chars=500, placeholder="참고) 사건이 일어나게된 이유 등 정황")
-    user_input_damage = st.text_area(label='해당 사건으로 인해 입은 피해 사실을 입력 하세요.', max_chars=500, placeholder="예) 20,000,000원의 금전피해 및 정신적 피해")
-    user_input_reason = st.text_area(label='고소할 결심과 처벌을 원하는 이유를 입력 하세요.', max_chars=500, placeholder="예) 피고소인이 돈을 빌려간 후 갚지 않고 잠적한 상태로 인한 심각한 재정위기 및 정신적 피해")
-    user_input_evidence = st.text_input(label='제출할 수 있는 증거 자료가 있다면 콤마(,)로 구분하여 넣으세요.', max_chars=200, placeholder="예) 문자메세지, 거래 내역서")
-    user_input_etc_accuse = st.text_input(label='같은 내용의 고소장을 이미 접수하거나 제출한 적이 있는지 입력 하세요.', max_chars=100, placeholder="예) 본 사건과 관련된 형사 사건 수사 없음")
-    user_input_station = st.text_input(label='고소장을 제출할 경철서명을 입력 하세요.', max_chars=50, placeholder="예) 강남경찰서")
+    st.text_input(label='어떤 범죄(죄목)로 고소할 것인지 입력 하세요.', max_chars=100, key='user_input_purpose', placeholder="예) 사기죄")
+    st.text_input(label='사건이 일어난 일시와 장소를 입력 하세요.', max_chars=50, key='user_input_crime_time', placeholder="예) 2023년 4월 5일. 서울 강남구 XXX앞")
+    st.text_area(label='사건이 일어났을 때의 정황을 설명해 주세요.', max_chars=500, key='user_input_crime_history', placeholder="참고) 사건이 일어나게된 이유 등 정황")
+    st.text_area(label='해당 사건으로 인해 입은 피해 사실을 입력 하세요.', max_chars=500, key='user_input_damage', placeholder="예) 20,000,000원의 금전피해 및 정신적 피해")
+    st.text_area(label='고소할 결심과 처벌을 원하는 이유를 입력 하세요.', max_chars=500, key='user_input_reason', placeholder="예) 피고소인이 돈을 빌려간 후 갚지 않고 잠적한 상태로 인한 심각한 재정위기 및 정신적 피해")
+    st.text_input(label='제출할 수 있는 증거 자료가 있다면 콤마(,)로 구분하여 넣으세요.', max_chars=200, key='user_input_evidence', placeholder="예) 문자메세지, 거래 내역서")
+    st.text_input(label='같은 내용의 고소장을 이미 접수하거나 제출한 적이 있는지 입력 하세요.', max_chars=100, key='user_input_etc_accuse', placeholder="예) 본 사건과 관련된 형사 사건 수사 없음")
+    st.text_input(label='고소장을 제출할 경철서명을 입력 하세요.', max_chars=50, key='user_input_station', placeholder="예) 강남경찰서")
     
 else:
     input_info_title_1 = '<p style="font-family:sans-serif; font-weight:bold; color:gray; font-size: 14px;">입력정보</p>'
@@ -112,32 +112,32 @@ else:
 content_input_limit = 4
 def click_write_paper():
     if st.session_state.disable_write_paper_5 == 0:
-        if (len(user_input_sender_name) == 0) or (len(user_input_receiver_name) == 0) \
-        or (len(user_input_purpose) == 0) or (len(user_input_crime_time) == 0) or (len(user_input_crime_history) == 0) \
-        or (len(user_input_damage) == 0) or (len(user_input_reason) == 0) \
-        or (len(user_input_etc_accuse) == 0) or (len(user_input_station) == 0):
+        if (len(st.session_state.user_input_sender_name) == 0) or (len(st.session_state.user_input_receiver_name) == 0) \
+        or (len(st.session_state.user_input_purpose) == 0) or (len(st.session_state.user_input_crime_time) == 0) or (len(st.session_state.user_input_crime_history) == 0) \
+        or (len(st.session_state.user_input_damage) == 0) or (len(st.session_state.user_input_reason) == 0) \
+        or (len(st.session_state.user_input_etc_accuse) == 0) or (len(st.session_state.user_input_station) == 0):
             st.session_state.result_answer = "모든 입력란에 내용을 입력 하세요."
         
-        elif (len(user_input_crime_time) < content_input_limit) or (len(user_input_crime_history) < content_input_limit) \
-            or (len(user_input_damage) < content_input_limit) or (len(user_input_reason) < content_input_limit):
+        elif (len(st.session_state.user_input_crime_time) < content_input_limit) or (len(st.session_state.user_input_crime_history) < content_input_limit) \
+            or (len(st.session_state.user_input_damage) < content_input_limit) or (len(st.session_state.user_input_reason) < content_input_limit):
             st.session_state.result_answer = "내용이 너무 짧습니다."
             
         else:
             st.session_state.disable_write_paper_5 = 1
             st.session_state.hide_main_side = True
             
-            receiver_etc = user_input_receiver_etc
-            if user_input_receiver_etc == None or len(user_input_receiver_etc) == 0:
+            receiver_etc = st.session_state.user_input_receiver_etc
+            if "user_input_receiver_etc" not in st.session_state or len(st.session_state.user_input_receiver_etc) == 0:
                 receiver_etc = "없음"
                 
-            evidence = user_input_evidence
-            if user_input_evidence == None or len(user_input_evidence) == 0:
+            evidence = st.session_state.user_input_evidence
+            if "user_input_evidence" not in st.session_state or len(st.session_state.user_input_evidence) == 0:
                 evidence = "없음"
             
-            user_inputs = {"is_post_conversation": False, "sender_name": user_input_sender_name, "receiver_name": user_input_receiver_name, \
-            "receiver_etc": receiver_etc, "purpose": user_input_purpose, "crime_time": user_input_crime_time, "crime_history": user_input_crime_history, \
-            "damage": user_input_damage, "reason": user_input_reason, "evidence": evidence, \
-            "etc_accuse": user_input_etc_accuse, "station": user_input_station, "add_info": "없음"}
+            user_inputs = {"is_post_conversation": False, "sender_name": st.session_state.user_input_sender_name, "receiver_name": st.session_state.user_input_receiver_name, \
+            "receiver_etc": receiver_etc, "purpose": st.session_state.user_input_purpose, "crime_time": st.session_state.user_input_crime_time, "crime_history": st.session_state.user_input_crime_history, \
+            "damage": st.session_state.user_input_damage, "reason": st.session_state.user_input_reason, "evidence": evidence, \
+            "etc_accuse": st.session_state.user_input_etc_accuse, "station": st.session_state.user_input_station, "add_info": "없음"}
             
             # 입력정보 저장
             st.session_state.input_info_dict = user_inputs
@@ -151,8 +151,8 @@ def click_write_paper():
         st.session_state.disable_write_paper_5 = 2
         st.session_state.input_info_dict["is_post_conversation"] = True
         
-        if user_input_add_info != None and len(user_input_add_info) > 0:
-            st.session_state.input_info_dict["add_info"] = user_input_add_info
+        if "user_input_add_info" in st.session_state and len(st.session_state.user_input_add_info) > 0:
+            st.session_state.input_info_dict["add_info"] = st.session_state.user_input_add_info
         
         # when the user clicks on button it will fetch the API
         result = requests.post(url=f"{st.session_state.backend_url}write-paper-5", data=json.dumps(st.session_state.input_info_dict))
@@ -174,7 +174,7 @@ elif st.session_state.disable_write_paper_5 == 1 and len(st.session_state.result
     st.success(st.session_state.result_answer)
     st.text("")
     
-    user_input_add_info = st.text_area(label='AI가 요청한 추가 정보를 입력 하세요.', max_chars=500)
+    st.text_area(label='AI가 요청한 추가 정보를 입력 하세요.', max_chars=500, key='user_input_add_info')
     st.warning(result_warning_comment)
     
 elif st.session_state.disable_write_paper_5 == 2 and len(st.session_state.result_answer_post) > 0:

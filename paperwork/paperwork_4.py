@@ -80,24 +80,21 @@ st.text("")
 # 입력 사항
 if st.session_state.disable_write_paper_4 == 0:
     st.info("아래의 입력사항은 받은 소장의 내용을 참조하여 기재 하세요.")
-    user_input_sender_name = st.text_input(label='원고 이름을 입력 하세요.', max_chars=20, placeholder="예) 임꺽정")
-    #user_input_sender_addr = st.text_input(label='원고 주소를 입력 하세요.', max_chars=50, placeholder="예) 서울시 강남구 테헤란로 456")
+    st.text_input(label='원고 이름을 입력 하세요.', max_chars=20, key='user_input_sender_name', placeholder="예) 임꺽정")
+    st.text_input(label='피고 이름을 입력 하세요.', max_chars=20, key='user_input_receiver_name', placeholder="예) 홍길동")
 
-    user_input_receiver_name = st.text_input(label='피고 이름을 입력 하세요.', max_chars=20, placeholder="예) 홍길동")
-    #user_input_receiver_addr = st.text_input(label='피고 주소를 입력 하세요.', max_chars=50, placeholder="예) 서울시 강남구 테헤란로 123")
-
-    user_input_case_no = st.text_input(label='사건번호를 입력 하세요.', max_chars=20, placeholder="예) 20 가")
-    user_input_case_name = st.text_input(label='소 제목을 입력 하세요.', max_chars=50, placeholder="예) 대여금 청구의 소")
-    user_input_case_purpose = st.text_area(label='청구취지를 모두 입력 하세요.', max_chars=500, placeholder="예) 피고는 원고에게 10,000,000원 및 이에 대하여... 등")
-    user_input_case_cause = st.text_area(label='청구원인을 모두 입력 하세요.', max_chars=1000, placeholder="예) 원고는 2024년 4월 5일에 피고에게 금 10,000,000원을 변제기... 등")
-    user_input_case_prove = st.text_input(label='입증방법에 내용이 있다면 문서명을 콤마(,)로 구분하여 넣으세요.', max_chars=200, placeholder="예) 1. 갑 제1호증 거래내영서, 1. 갑 2호증 문자 메시지")
-    user_input_case_appendix = st.text_input(label='첨부서류에 내용이 있다면 문서명을 콤마(,)로 구분하여 넣으세요.', max_chars=200, placeholder="예) 소송 비용 납부서 각 1부, 소장부분 1부")
-    user_input_case_court = st.text_input(label='관할법원을 입력 하세요.', max_chars=20, placeholder="예) 서울중앙지방법원")
+    st.text_input(label='사건번호를 입력 하세요.', max_chars=20, key='user_input_case_no', placeholder="예) 20 가")
+    st.text_input(label='소 제목을 입력 하세요.', max_chars=50, key='user_input_case_name', placeholder="예) 대여금 청구의 소")
+    st.text_area(label='청구취지를 모두 입력 하세요.', max_chars=500, key='user_input_case_purpose', placeholder="예) 피고는 원고에게 10,000,000원 및 이에 대하여... 등")
+    st.text_area(label='청구원인을 모두 입력 하세요.', max_chars=1000, key='user_input_case_cause', placeholder="예) 원고는 2024년 4월 5일에 피고에게 금 10,000,000원을 변제기... 등")
+    st.text_input(label='입증방법에 내용이 있다면 문서명을 콤마(,)로 구분하여 넣으세요.', max_chars=200, key='user_input_case_prove', placeholder="예) 1. 갑 제1호증 거래내영서, 1. 갑 2호증 문자 메시지")
+    st.text_input(label='첨부서류에 내용이 있다면 문서명을 콤마(,)로 구분하여 넣으세요.', max_chars=200, key='user_input_case_appendix', placeholder="예) 소송 비용 납부서 각 1부, 소장부분 1부")
+    st.text_input(label='관할법원을 입력 하세요.', max_chars=20, key='user_input_case_court', placeholder="예) 서울중앙지방법원")
 
     st.text("")
     st.warning("아래는 반박할 내용을 기재 하세요.")
-    user_input_rebut = st.text_area(label='구체적인 사실과 반박 내용을 입력 하세요.', max_chars=500, placeholder="예) 실제로 돈을 빌린 것은 맞으나 빌린 돈을 갚는 대신 원고의 친구에게 내 차 소유권을 이전 하였음.")
-    user_input_appendix = st.text_input(label='별도로 첨부할 증거 문서가 있다면 문서명을 콤마(,)로 구분하여 넣으세요.', max_chars=200, placeholder="예) 차량 소유권 이전 증명서, 거래 내역 증명 서류")
+    st.text_area(label='구체적인 사실과 반박 내용을 입력 하세요.', max_chars=500, key='user_input_rebut', placeholder="예) 실제로 돈을 빌린 것은 맞으나 빌린 돈을 갚는 대신 원고의 친구에게 내 차 소유권을 이전 하였음.")
+    st.text_input(label='별도로 첨부할 증거 문서가 있다면 문서명을 콤마(,)로 구분하여 넣으세요.', max_chars=200, key='user_input_appendix', placeholder="예) 차량 소유권 이전 증명서, 거래 내역 증명 서류")
     
 else:
     input_info_title_1 = '<p style="font-family:sans-serif; font-weight:bold; color:gray; font-size: 14px;">소장에 대한 입력정보</p>'
@@ -122,33 +119,33 @@ else:
 content_input_limit = 4
 def click_write_paper():
     if st.session_state.disable_write_paper_4 == 0:
-        if (len(user_input_sender_name) == 0) or (len(user_input_receiver_name) == 0) \
-        or (len(user_input_case_no) == 0) or (len(user_input_case_name) == 0) or (len(user_input_case_purpose) == 0) or (len(user_input_case_cause) == 0) or (len(user_input_case_court) == 0) \
-        or (len(user_input_rebut) == 0):
+        if (len(st.session_state.user_input_sender_name) == 0) or (len(st.session_state.user_input_receiver_name) == 0) \
+        or (len(st.session_state.user_input_case_no) == 0) or (len(st.session_state.user_input_case_name) == 0) or (len(st.session_state.user_input_case_purpose) == 0) or (len(st.session_state.user_input_case_cause) == 0) or (len(st.session_state.user_input_case_court) == 0) \
+        or (len(st.session_state.user_input_rebut) == 0):
             st.session_state.result_answer = "모든 입력란에 내용을 입력 하세요."
         
-        elif (len(user_input_case_purpose) < content_input_limit) or (len(user_input_case_cause) < content_input_limit) or (len(user_input_case_court) < content_input_limit) or (len(user_input_rebut) < content_input_limit):
+        elif (len(st.session_state.user_input_case_purpose) < content_input_limit) or (len(st.session_state.user_input_case_cause) < content_input_limit) or (len(st.session_state.user_input_case_court) < content_input_limit) or (len(st.session_state.user_input_rebut) < content_input_limit):
             st.session_state.result_answer = "내용이 너무 짧습니다."
             
         else:
             st.session_state.disable_write_paper_4 = 1
             st.session_state.hide_main_side = True
             
-            case_prove = user_input_case_prove
-            if user_input_case_prove == None or len(user_input_case_prove) == 0:
+            case_prove = st.session_state.user_input_case_prove
+            if "user_input_case_prove" not in st.session_state or len(st.session_state.user_input_case_prove) == 0:
                 case_prove = "없음"
                 
-            case_appendix = user_input_case_appendix
-            if user_input_case_appendix == None or len(user_input_case_appendix) == 0:
+            case_appendix = st.session_state.user_input_case_appendix
+            if "user_input_case_appendix" not in st.session_state or len(st.session_state.user_input_case_appendix) == 0:
                 case_appendix = "없음"
                 
-            appendix = user_input_appendix
-            if user_input_appendix == None or len(user_input_appendix) == 0:
+            appendix = st.session_state.user_input_appendix
+            if "user_input_appendix" not in st.session_state or len(st.session_state.user_input_appendix) == 0:
                 appendix = "없음"
             
-            user_inputs = {"is_post_conversation": False, "sender_name": user_input_sender_name, "receiver_name": user_input_receiver_name, \
-            "case_no": user_input_case_no, "case_name": user_input_case_name, "case_purpose": user_input_case_purpose, "case_cause": user_input_case_cause, "case_prove": case_prove, "case_appendix": case_appendix, "case_court": user_input_case_court, \
-            "rebut": user_input_rebut, "appendix": appendix, "add_info": "없음"}
+            user_inputs = {"is_post_conversation": False, "sender_name": st.session_state.user_input_sender_name, "receiver_name": st.session_state.user_input_receiver_name, \
+            "case_no": st.session_state.user_input_case_no, "case_name": st.session_state.user_input_case_name, "case_purpose": st.session_state.user_input_case_purpose, "case_cause": st.session_state.user_input_case_cause, "case_prove": case_prove, "case_appendix": case_appendix, "case_court": st.session_state.user_input_case_court, \
+            "rebut": st.session_state.user_input_rebut, "appendix": appendix, "add_info": "없음"}
             
             # 입력정보 저장
             st.session_state.input_info_dict = user_inputs
@@ -162,8 +159,8 @@ def click_write_paper():
         st.session_state.disable_write_paper_4 = 2
         st.session_state.input_info_dict["is_post_conversation"] = True
         
-        if user_input_add_info != None and len(user_input_add_info) > 0:
-            st.session_state.input_info_dict["add_info"] = user_input_add_info
+        if "user_input_add_info" in st.session_state and len(st.session_state.user_input_add_info) > 0:
+            st.session_state.input_info_dict["add_info"] = st.session_state.user_input_add_info
         
         # when the user clicks on button it will fetch the API
         result = requests.post(url=f"{st.session_state.backend_url}write-paper-4", data=json.dumps(st.session_state.input_info_dict))
@@ -185,7 +182,7 @@ elif st.session_state.disable_write_paper_4 == 1 and len(st.session_state.result
     st.success(st.session_state.result_answer)
     st.text("")
     
-    user_input_add_info = st.text_area(label='AI가 요청한 추가 정보를 입력 하세요.', max_chars=500, placeholder="예) 차 소유권 이전을 증명할 차량 등록증이 있고 차량 소유권 이전으로 변제를 대신하기로 합의한 대화문자메세지 있음.")
+    st.text_area(label='AI가 요청한 추가 정보를 입력 하세요.', max_chars=500, key='user_input_add_info', placeholder="예) 차 소유권 이전을 증명할 차량 등록증이 있고 차량 소유권 이전으로 변제를 대신하기로 합의한 대화문자메세지 있음.")
     st.warning(result_warning_comment)
     
 elif st.session_state.disable_write_paper_4 == 2 and len(st.session_state.result_answer_post) > 0:

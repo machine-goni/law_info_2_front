@@ -52,8 +52,7 @@ st.text("")
 case_type = st.selectbox('사건종류를 선택하세요.', ('형사', '민사', '가사'))
 st.caption('사건 종류를 정확히 선택하면 관련된 판례를 검색하는 데 도움이 됩니다. 그렇지 않을 경우 답변이 적절하지 않을 수 있습니다.')
 #user_question = st.text_input(label='무엇이 궁금하세요?', max_chars=500)
-user_question = st.text_area(label='무엇이 궁금하세요?', max_chars=500)
-user_input_question = {'question': user_question}
+st.text_area(label='무엇이 궁금하세요?', max_chars=500, key='user_question')
 
 
 # 판례 검색 기능은 한번 진입해서 질문하면 더이상 질문할 수 없도록 하기 위해 보내기 버튼의 활성/비활성을 저장해논다
@@ -78,19 +77,21 @@ if "result_etc" not in st.session_state:
 if "result_urls" not in st.session_state:
     st.session_state.result_urls = []
     
-
+# 버튼 콜백에서 주의 할점은 input ui 에서 리턴 받은 변수에 값이 들어가는 타이밍 보다 콜백호출이 빠르다(브라우져마다 다른듯).
+# 따라서 user_question = st.text_area 이런식으로 하면 최신 값을 못 얻을때가 있다. 저렇게 쓰지 말고 key를 지정하고 불러와야한다.
+#def click_send_question(arg):  # args 를 넣었다면 이렇게 그냥 받아써주면 된다.
 def click_send_question():
     if st.session_state.disable_send_question == False:
-        if len(user_question) == 0:
+        if len(st.session_state.user_question) == 0:
             st.session_state.result_answer = "질문을 적어 주세요."
-        elif len(user_question) < 10:
+        elif len(st.session_state.user_question) < 10:
             st.session_state.result_answer = "내용이 너무 짧습니다. 좀 더 구체적인 질문이나 상황을 적어 주세요."
         else:
             st.session_state.disable_send_question = True
             st.session_state.hide_main_side = True
             
             # when the user clicks on button it will fetch the API
-            user_inputs = {"question": user_question, "case_type":case_type}
+            user_inputs = {"question": st.session_state.user_question, "case_type":case_type}
             result = requests.post(url=f"{st.session_state.backend_url}question", data=json.dumps(user_inputs))
             #print(f"click_send_question: {result}")
             rslt = json.loads(json.loads(result.text))
@@ -101,10 +102,11 @@ def click_send_question():
             st.session_state.result_etc = rslt.get('etc_relevant_precs')
             st.session_state.result_urls = rslt.get('statistics_url')
             #print(f"click_send_question \nrelevance: {st.session_state.result_relevance}, \nvectordb_choice: {st.session_state.result_vectordb_choice}, \netc: {st.session_state.result_etc}")
-    
+
 if st.session_state.disable_send_question == False:    
-    st.button('질문하기', key='btn_send_question', on_click=click_send_question, disabled=False)
-    
+    #st.button('질문하기', key='btn_send_question', on_click=click_send_question, args=('Hi!',), disabled=False)
+    st.button('질문하기', on_click=click_send_question)
+
     
 def click_go_to_main():
     # job 만 비워줘도 버튼이 눌리는 동작과 함께 streamlit_app.py 가 재실행되고 스크립트 끝부분을 통해 start_task 페이지가 실행된다.

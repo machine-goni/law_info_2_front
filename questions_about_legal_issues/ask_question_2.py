@@ -56,8 +56,8 @@ st.text("")
 
 # 입력 사항
 if st.session_state.disable_advice == 0:
-    user_input_status = st.text_area(label='질문의 배경이 되는 현재의 상황을 상세히 설명해 주세요.', max_chars=1500, placeholder="예) 상대방과 금전거래를 한 적이 없는데 상대방이 법원에 물품 대금 10,000,000원에 대한 지급명령신청을 하였습니다.")
-    user_input_question = st.text_area(label='현재의 상황에서 궁금하거나 하려고 하는 부분을 입력하세요.', max_chars=500, placeholder="예) 어떻게 대응해야 할까요?")
+    st.text_area(label='질문의 배경이 되는 현재의 상황을 상세히 설명해 주세요.', max_chars=1500, key='user_input_status', placeholder="예) 상대방과 금전거래를 한 적이 없는데 상대방이 법원에 물품 대금 10,000,000원에 대한 지급명령신청을 하였습니다.")
+    st.text_area(label='현재의 상황에서 궁금하거나 하려고 하는 부분을 입력하세요.', max_chars=500, key='user_input_question', placeholder="예) 어떻게 대응해야 할까요?")
     
 else:
     input_info_title_1 = '<p style="font-family:sans-serif; font-weight:bold; color:gray; font-size: 14px;">입력정보</p>'
@@ -69,10 +69,10 @@ else:
 content_input_limit = 4
 def click_write_paper():
     if st.session_state.disable_advice == 0:
-        if (len(user_input_status) == 0) or (len(user_input_question) == 0):
+        if (len(st.session_state.user_input_status) == 0) or (len(st.session_state.user_input_question) == 0):
             st.session_state.result_answer = "모든 입력란에 내용을 입력 하세요."
         
-        elif (len(user_input_status) < content_input_limit) or (len(user_input_question) < content_input_limit):
+        elif (len(st.session_state.user_input_status) < content_input_limit) or (len(st.session_state.user_input_question) < content_input_limit):
             st.session_state.result_answer = "내용이 너무 짧습니다."
             
         else:
@@ -80,7 +80,7 @@ def click_write_paper():
             st.session_state.hide_main_side = True
                 
             user_inputs = {"is_post_conversation": False, \
-            "status": user_input_status, "question": user_input_question, \
+            "status": st.session_state.user_input_status, "question": st.session_state.user_input_question, \
             "add_info": "없음"}
             
             # 입력정보 저장
@@ -95,8 +95,8 @@ def click_write_paper():
         st.session_state.disable_advice = 2
         st.session_state.input_info_dict["is_post_conversation"] = True
         
-        if user_input_add_info != None and len(user_input_add_info) > 0:
-            st.session_state.input_info_dict["add_info"] = user_input_add_info
+        if "user_input_add_info" in st.session_state and len(st.session_state.user_input_add_info) > 0:
+            st.session_state.input_info_dict["add_info"] = st.session_state.user_input_add_info
         
         # when the user clicks on button it will fetch the API
         result = requests.post(url=f"{st.session_state.backend_url}advice", data=json.dumps(st.session_state.input_info_dict))
@@ -118,7 +118,7 @@ elif st.session_state.disable_advice == 1 and len(st.session_state.result_answer
     st.success(st.session_state.result_answer)
     st.text("")
     
-    user_input_add_info = st.text_area(label='AI가 요청한 추가 정보를 입력 하세요.', max_chars=500)
+    st.text_area(label='AI가 요청한 추가 정보를 입력 하세요.', max_chars=500, key='user_input_add_info')
     st.warning(result_warning_comment)
     
 elif st.session_state.disable_advice == 2 and len(st.session_state.result_answer_post) > 0:
@@ -138,7 +138,7 @@ elif st.session_state.disable_advice == 2 and len(st.session_state.result_answer
     st.button('처음으로', on_click=click_go_to_main)
         
     st.divider()
-    st.info('상담이 필요하지만 상황이 여의치 경우 법률구조법에 따라 설립된 "대한법률구조공단"에서 법률 상담을 받으실 수 있습니다.')
+    st.info('상담이 필요하지만 상황이 여의치 않을 경우 법률구조법에 따라 설립된 "대한법률구조공단"에서 법률 상담을 받을 수 있습니다.')
     st.page_link(f"https://www.klac.or.kr", label="대한법률구조공단 홈페이지", icon=":material/link:")
     #components.iframe(statistics_result_url[2], width=700, height=630, scrolling=True)
     components.iframe("https://www.index.go.kr/unity/openApi/chartUserShow.do?idntfcId=53B2F01062E204W6&ixCode=2479&statsCode=247901&chartNo=1", width=700, height=700, scrolling=True)

@@ -92,14 +92,14 @@ st.text("")
 
 # 입력 사항
 if st.session_state.disable_write_paper_6 == 0:
-    user_input_sender_name = st.text_input(label='원고 이름을 입력 하세요.', max_chars=20, placeholder="예) 임꺽정")
-    user_input_receiver_name = st.text_input(label='피고 이름을 입력 하세요.', max_chars=20, placeholder="예) 홍길동")
+    st.text_input(label='원고 이름을 입력 하세요.', max_chars=20, key='user_input_sender_name', placeholder="예) 임꺽정")
+    st.text_input(label='피고 이름을 입력 하세요.', max_chars=20, key='user_input_receiver_name', placeholder="예) 홍길동")
     
-    user_input_case_name = st.text_input(label='사건명을 입력 하세요.', max_chars=50, placeholder="예) 대여금 청구 소송")
-    user_input_purpose = st.text_area(label='원고가 요구하는 사항을 명확하게 기술 하세요.', max_chars=300, placeholder="예) 피고는 원고에게 대여금 10,000,000원 및 이에 대하여 소장부본 송달 다음 날부터 다 갚는 날까지 연 10%의 비율로 계산한 돈을 지급하라. 소송비용은 피고가 부담한다.")
-    user_input_reason = st.text_area(label='청구원인에 대한 구체적인 사실을 기술 하세요. 즉, 위 항의 요구를 하게된 이유를 설명 하세요.', max_chars=1000, placeholder="예) 피고는 원고에게 2024년 1월 1일에 10,000,000원을 빌려 2024년 2월 1일까지 갚기로 하였으나 현재까지 갚지 않고 있습니다.")
-    user_input_evidence = st.text_input(label='위에서 기술한 청구원인을 입증할 증거가 있다면 콤마(,)로 구분하여 넣으세요.', max_chars=200, placeholder="예) 문자메세지, 차용증")
-    user_input_court = st.text_input(label='제출할 관할법원을 입력 하세요. 위 안내에따라 [대한민국법원 전자소송 - 관할법원 찾기]를 이용하세요.', max_chars=20, placeholder="예) 서울중앙지방법원")
+    st.text_input(label='사건명을 입력 하세요.', max_chars=50, key='user_input_case_name', placeholder="예) 대여금 청구 소송")
+    st.text_area(label='원고가 요구하는 사항을 명확하게 기술 하세요.', max_chars=300, key='user_input_purpose', placeholder="예) 피고는 원고에게 대여금 10,000,000원 및 이에 대하여 소장부본 송달 다음 날부터 다 갚는 날까지 연 10%의 비율로 계산한 돈을 지급하라. 소송비용은 피고가 부담한다.")
+    st.text_area(label='청구원인에 대한 구체적인 사실을 기술 하세요. 즉, 위 항의 요구를 하게된 이유를 설명 하세요.', max_chars=1000, key='user_input_reason', placeholder="예) 피고는 원고에게 2024년 1월 1일에 10,000,000원을 빌려 2024년 2월 1일까지 갚기로 하였으나 현재까지 갚지 않고 있습니다.")
+    st.text_input(label='위에서 기술한 청구원인을 입증할 증거가 있다면 콤마(,)로 구분하여 넣으세요.', max_chars=200, key='user_input_evidence', placeholder="예) 문자메세지, 차용증")
+    st.text_input(label='제출할 관할법원을 입력 하세요. 위 안내에따라 [대한민국법원 전자소송 - 관할법원 찾기]를 이용하세요.', max_chars=20, key='user_input_court', placeholder="예) 서울중앙지방법원")
     
 else:
     input_info_title_1 = '<p style="font-family:sans-serif; font-weight:bold; color:gray; font-size: 14px;">입력정보</p>'
@@ -117,24 +117,24 @@ else:
 content_input_limit = 4
 def click_write_paper():
     if st.session_state.disable_write_paper_6 == 0:
-        if (len(user_input_sender_name) == 0) or (len(user_input_receiver_name) == 0) \
-        or (len(user_input_case_name) == 0) or (len(user_input_purpose) == 0) or (len(user_input_reason) == 0) or (len(user_input_court) == 0):
+        if (len(st.session_state.user_input_sender_name) == 0) or (len(st.session_state.user_input_receiver_name) == 0) \
+        or (len(st.session_state.user_input_case_name) == 0) or (len(st.session_state.user_input_purpose) == 0) or (len(st.session_state.user_input_reason) == 0) or (len(st.session_state.user_input_court) == 0):
             st.session_state.result_answer = "모든 입력란에 내용을 입력 하세요."
         
-        elif (len(user_input_case_name) < content_input_limit) or (len(user_input_purpose) < content_input_limit) or (len(user_input_reason) < content_input_limit):
+        elif (len(st.session_state.user_input_case_name) < content_input_limit) or (len(st.session_state.user_input_purpose) < content_input_limit) or (len(st.session_state.user_input_reason) < content_input_limit):
             st.session_state.result_answer = "내용이 너무 짧습니다."
             
         else:
             st.session_state.disable_write_paper_6 = 1
             st.session_state.hide_main_side = True
                 
-            evidence = user_input_evidence
-            if user_input_evidence == None or len(user_input_evidence) == 0:
+            evidence = st.session_state.user_input_evidence
+            if "user_input_evidence" not in st.session_state or len(st.session_state.user_input_evidence) == 0:
                 evidence = "없음"
             
-            user_inputs = {"is_post_conversation": False, "sender_name": user_input_sender_name, "receiver_name": user_input_receiver_name, \
-            "case_name": user_input_case_name, "purpose": user_input_purpose, "reason": user_input_reason, "evidence": evidence, \
-            "court": user_input_court, "add_info": "없음"}
+            user_inputs = {"is_post_conversation": False, "sender_name": st.session_state.user_input_sender_name, "receiver_name": st.session_state.user_input_receiver_name, \
+            "case_name": st.session_state.user_input_case_name, "purpose": st.session_state.user_input_purpose, "reason": st.session_state.user_input_reason, "evidence": evidence, \
+            "court": st.session_state.user_input_court, "add_info": "없음"}
             
             # 입력정보 저장
             st.session_state.input_info_dict = user_inputs
@@ -148,8 +148,8 @@ def click_write_paper():
         st.session_state.disable_write_paper_6 = 2
         st.session_state.input_info_dict["is_post_conversation"] = True
         
-        if user_input_add_info != None and len(user_input_add_info) > 0:
-            st.session_state.input_info_dict["add_info"] = user_input_add_info
+        if "user_input_add_info" in st.session_state and len(st.session_state.user_input_add_info) > 0:
+            st.session_state.input_info_dict["add_info"] = st.session_state.user_input_add_info
         
         # when the user clicks on button it will fetch the API
         result = requests.post(url=f"{st.session_state.backend_url}write-paper-6", data=json.dumps(st.session_state.input_info_dict))
@@ -171,7 +171,7 @@ elif st.session_state.disable_write_paper_6 == 1 and len(st.session_state.result
     st.success(st.session_state.result_answer)
     st.text("")
     
-    user_input_add_info = st.text_area(label='AI가 요청한 추가 정보를 입력 하세요.', max_chars=500)
+    st.text_area(label='AI가 요청한 추가 정보를 입력 하세요.', max_chars=500, key='user_input_add_info')
     st.warning(result_warning_comment)
     
 elif st.session_state.disable_write_paper_6 == 2 and len(st.session_state.result_answer_post) > 0:

@@ -89,68 +89,60 @@ st.text("")
 
 
 # 입력 사항. 주소, 연락처 등은 개인정보이기도 하고 어차피 양식에 옮겨 넣을 것이기 때문에 입력받지 않는것으로 수정한다.
-user_input_sender_name = st.text_input(label='채권자 성명 또는 법인명을 입력 하세요.', max_chars=20, placeholder="예) 임꺽정")
-#user_input_sender_addr = st.text_input(label='채권자 주소를 입력 하세요.', max_chars=50, placeholder="예) 서울시 강남구 테헤란로 456")
-#user_input_sender_phone = st.text_input(label='채권자 연락처를 입력 하세요.', max_chars=50, placeholder="예) 010-1234-5678")
+st.text_input(label='채권자 성명 또는 법인명을 입력 하세요.', max_chars=20, key='user_input_sender_name', placeholder="예) 임꺽정")
 
-user_input_receiver_name = st.text_input(label='채무자 성명 또는 법인명을 입력 하세요.', max_chars=20, placeholder="예) 홍길동")
-#user_input_receiver_addr = st.text_input(label='채무자 주소를 입력 하세요.', max_chars=50, placeholder="예) 서울시 강남구 테헤란로 123")
-user_input_court = st.text_input(label='제출할 관할법원을 입력 하세요. 위 안내에따라 [대한민국법원 전자소송 - 관할법원 찾기]를 이용하세요.', max_chars=20, placeholder="예) 서울중앙지방법원")
+st.text_input(label='채무자 성명 또는 법인명을 입력 하세요.', max_chars=20, key='user_input_receiver_name', placeholder="예) 홍길동")
+st.text_input(label='제출할 관할법원을 입력 하세요. 위 안내에따라 [대한민국법원 전자소송 - 관할법원 찾기]를 이용하세요.', max_chars=20, key='user_input_court', placeholder="예) 서울중앙지방법원")
 
-user_input_ask_amount = st.number_input(label='청구 금액을 입력 하세요.', placeholder="예) 10000000", min_value=0, format="%d", step=1)
-user_input_ask_interest = st.text_input(label='이자율을 입력 하세요.', max_chars=20, placeholder="예) 연 5%")
-#user_input_ask_start_date = st.text_input(label='지급명령정본 송달 후 이자 발생 시작일을 입력 하세요.', max_chars=50, placeholder="예) 2024년 4월 5일")
+st.number_input(label='청구 금액을 입력 하세요.', placeholder="예) 10000000", min_value=0, key='user_input_ask_amount', format="%d", step=1)
+st.text_input(label='이자율을 입력 하세요.', max_chars=20, key='user_input_ask_interest', placeholder="예) 연 5%")
 
-user_input_ask_transmittal_fee = st.number_input(label='송달료를 입력 하세요.', placeholder="예) 62400", min_value=0, format="%d", step=1)
-user_input_ask_stamp_fee = st.number_input(label='인지대를 입력 하세요.', placeholder="예) 4500", min_value=0, format="%d", step=1)
+st.number_input(label='송달료를 입력 하세요.', placeholder="예) 62400", min_value=0, key='user_input_ask_transmittal_fee', format="%d", step=1)
+st.number_input(label='인지대를 입력 하세요.', placeholder="예) 4500", min_value=0, key='user_input_ask_stamp_fee', format="%d", step=1)
 
-user_input_ask_reason = st.text_input(label='채권 발생 사유를 입력 하세요.', max_chars=50, placeholder="예) 대여금")
-user_input_ask_reason_detail = st.text_area(label='청구의 구체적인 내용을 입력 하세요.', max_chars=500, placeholder="예) 2024년 4월 5일에 임꺽정이 홍길동에게 10,000,000원을 변제기 2024년 5월 5일로 정하여 빌려주었다. 그러나 홍길동은 전혀 변제하지 않고 있다.")
+st.text_input(label='채권 발생 사유를 입력 하세요.', max_chars=50, key='user_input_ask_reason', placeholder="예) 대여금")
+st.text_area(label='청구의 구체적인 내용을 입력 하세요.', max_chars=500, key='user_input_ask_reason_detail', placeholder="예) 2024년 4월 5일에 임꺽정이 홍길동에게 10,000,000원을 변제기 2024년 5월 5일로 정하여 빌려주었다. 그러나 홍길동은 전혀 변제하지 않고 있다.")
 
-user_input_appendix = st.text_input(label='별도로 첨부할 문서가 있다면 문서명을 콤마(,)로 구분하여 넣으세요.', max_chars=200, placeholder="예) 대여금 계약서(사본), 변제기 약정서(사본) 혹은 없음")
+st.text_input(label='별도로 첨부할 문서가 있다면 문서명을 콤마(,)로 구분하여 넣으세요.', max_chars=200, key='user_input_appendix', placeholder="예) 대여금 계약서(사본), 변제기 약정서(사본) 혹은 없음")
 
 content_input_limit = 4
 def click_write_paper():
     if st.session_state.disable_write_paper_2 == False:
-        #if (len(user_input_sender_name) == 0) or (len(user_input_sender_addr) == 0) or (len(user_input_sender_phone) == 0) or (len(user_input_receiver_name) == 0) or (len(user_input_receiver_addr) == 0) or (len(user_input_court) == 0)\
-        if (len(user_input_sender_name) == 0) or (len(user_input_receiver_name) == 0) or (len(user_input_court) == 0)\
-        or user_input_ask_amount == 0 or (len(user_input_ask_interest) == 0) \
-        or user_input_ask_transmittal_fee == 0 or user_input_ask_stamp_fee == 0  or (len(user_input_ask_reason) == 0) or (len(user_input_ask_reason_detail) == 0):
+        if (len(st.session_state.user_input_sender_name) == 0) or (len(st.session_state.user_input_receiver_name) == 0) or (len(st.session_state.user_input_court) == 0)\
+        or st.session_state.user_input_ask_amount == 0 or (len(st.session_state.user_input_ask_interest) == 0) \
+        or st.session_state.user_input_ask_transmittal_fee == 0 or st.session_state.user_input_ask_stamp_fee == 0  or (len(st.session_state.user_input_ask_reason) == 0) or (len(st.session_state.user_input_ask_reason_detail) == 0):
             st.session_state.result_answer = "모든 입력란에 내용을 입력 하세요."
         
-        #elif (len(user_input_sender_addr) < content_input_limit) or (len(user_input_sender_phone) < content_input_limit) or (len(user_input_receiver_addr) < content_input_limit) or (len(user_input_court) < content_input_limit)\
-        elif (len(user_input_court) < content_input_limit)\
-        or (len(user_input_ask_reason_detail) < content_input_limit):
+        elif (len(st.session_state.user_input_court) < content_input_limit)\
+        or (len(st.session_state.user_input_ask_reason_detail) < content_input_limit):
             st.session_state.result_answer = "내용이 너무 짧습니다."
             
         else:
             st.session_state.disable_write_paper_2 = True
             st.session_state.hide_main_side = True
             
-            appendix = user_input_appendix
-            if user_input_appendix == None or len(user_input_appendix) == 0:
+            appendix = st.session_state.user_input_appendix
+            if "user_input_appendix" not in st.session_state or len(st.session_state.user_input_appendix) == 0:
                 appendix = "없음"
             
             amount = None
-            if user_input_ask_amount != None and user_input_ask_amount > 0:
-                amount = format(user_input_ask_amount, ',d') + "원"
+            if "user_input_ask_amount" in st.session_state and st.session_state.user_input_ask_amount > 0:
+                amount = format(st.session_state.user_input_ask_amount, ',d') + "원"
                 
             transmittal_fee = None
-            if user_input_ask_transmittal_fee != None and user_input_ask_transmittal_fee > 0:
-                transmittal_fee = format(user_input_ask_transmittal_fee, ',d') + "원"
+            if "user_input_ask_transmittal_fee" in st.session_state and st.session_state.user_input_ask_transmittal_fee > 0:
+                transmittal_fee = format(st.session_state.user_input_ask_transmittal_fee, ',d') + "원"
                 
             stamp_fee = None
-            if user_input_ask_stamp_fee != None and user_input_ask_stamp_fee > 0:
-                stamp_fee = format(user_input_ask_stamp_fee, ',d') + "원"
+            if "user_input_ask_stamp_fee" in st.session_state and st.session_state.user_input_ask_stamp_fee > 0:
+                stamp_fee = format(st.session_state.user_input_ask_stamp_fee, ',d') + "원"
             
             # when the user clicks on button it will fetch the API
-            #user_inputs = {"sender_name": user_input_sender_name, "sender_addr": user_input_sender_addr, "sender_phone": user_input_sender_phone, \
-            #"receiver_name": user_input_receiver_name, "receiver_addr": user_input_receiver_addr, "court": user_input_court, \
-            user_inputs = {"sender_name": user_input_sender_name, \
-            "receiver_name": user_input_receiver_name, "court": user_input_court, \
-            "amount": amount, "ask_interest": user_input_ask_interest, \
+            user_inputs = {"sender_name": st.session_state.user_input_sender_name, \
+            "receiver_name": st.session_state.user_input_receiver_name, "court": st.session_state.user_input_court, \
+            "amount": amount, "ask_interest": st.session_state.user_input_ask_interest, \
             "transmittal_fee": transmittal_fee, "stamp_fee": stamp_fee, \
-            "ask_reason": user_input_ask_reason, "ask_reason_detail": user_input_ask_reason_detail, \
+            "ask_reason": st.session_state.user_input_ask_reason, "ask_reason_detail": st.session_state.user_input_ask_reason_detail, \
             "appendix": appendix}
             
             result = requests.post(url=f"{st.session_state.backend_url}write-paper-2", data=json.dumps(user_inputs))

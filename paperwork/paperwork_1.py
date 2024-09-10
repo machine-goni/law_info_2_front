@@ -70,36 +70,36 @@ expander.page_link(f"https://service.epost.go.kr/econprf.RetrieveCertForm.postal
 
 
 # 입력 사항. 내용증명은 다른데서 뺀 개인정보를 그냥 입력받는다.
-user_input_reason = st.text_area(label='내용증명을 보내는 이유(목적)에 대해 입력 하세요.', max_chars=200, placeholder="예) 상대방이 약속한 대금 지급을 이행하지 않았다.")
-user_input_fact = st.text_area(label='사실 관계에 대한 구체적인 내용을 입력 하세요.', max_chars=500, placeholder="예) 2024년 4월 4일에 계약을 체결했고, 1개월 이내에 대금 지급을 완료하기로 했다.")
-user_input_ask = st.text_area(label='상대방에게 요구할 구체적인 사항을 입력 하세요.', max_chars=200, placeholder="예) 2024년 7월 4일까지 대금 500만원을 지급하라.")
-user_input_point = st.text_area(label='강조할 사항을 입력 하세요.', max_chars=100, placeholder="예) 대금 지급이 되지 않을시 법적 책임을 물을 것이라는 내용 강조")
+st.text_area(label='내용증명을 보내는 이유(목적)에 대해 입력 하세요.', max_chars=200, key='user_input_reason', placeholder="예) 상대방이 약속한 대금 지급을 이행하지 않았다.")
+st.text_area(label='사실 관계에 대한 구체적인 내용을 입력 하세요.', max_chars=500, key='user_input_fact', placeholder="예) 2024년 4월 4일에 계약을 체결했고, 1개월 이내에 대금 지급을 완료하기로 했다.")
+st.text_area(label='상대방에게 요구할 구체적인 사항을 입력 하세요.', max_chars=200, key='user_input_ask', placeholder="예) 2024년 7월 4일까지 대금 500만원을 지급하라.")
+st.text_area(label='강조할 사항을 입력 하세요.', max_chars=100, key='user_input_point', placeholder="예) 대금 지급이 되지 않을시 법적 책임을 물을 것이라는 내용 강조")
 
-user_input_sender = st.text_input(label='내용증명을 보내는 사람의  이름과 주소를 입력 하세요.', max_chars=50, placeholder="예) 임꺽정, 서울시 강남구 테헤란로 456")
-user_input_phone = st.text_input(label='상대방이 연락할 수 있는 보내는 사람의 연락처를 입력 하세요.', max_chars=50, placeholder="예) 전화번호:010-1234-5678, 이메일:xxxxx@yyyyy.com")
-user_input_receiver = st.text_input(label='내용증명을 받을 사람의 이름과 주소를 입력 하세요.', max_chars=50, placeholder="예) 홍길동, 서울시 강남구 테헤란로 123")
+st.text_input(label='내용증명을 보내는 사람의  이름과 주소를 입력 하세요.', max_chars=50, key='user_input_sender', placeholder="예) 임꺽정, 서울시 강남구 테헤란로 456")
+st.text_input(label='상대방이 연락할 수 있는 보내는 사람의 연락처를 입력 하세요.', max_chars=50, key='user_input_phone', placeholder="예) 전화번호:010-1234-5678, 이메일:xxxxx@yyyyy.com")
+st.text_input(label='내용증명을 받을 사람의 이름과 주소를 입력 하세요.', max_chars=50, key='user_input_receiver', placeholder="예) 홍길동, 서울시 강남구 테헤란로 123")
 
-user_input_appendix = st.text_input(label='별도로 첨부할 문서가 있다면 문서명을 콤마(,)로 구분하여 넣으세요.', max_chars=200, placeholder="예) 차용증1, 차용증2 혹은 없음")
-user_input_style = st.selectbox('어조를 선택하세요.', ('강한 어조', '정중한 어조', '부드럽고 완곡한 어조'))
+st.text_input(label='별도로 첨부할 문서가 있다면 문서명을 콤마(,)로 구분하여 넣으세요.', max_chars=200, key='user_input_appendix', placeholder="예) 차용증1, 차용증2 혹은 없음")
+st.selectbox('어조를 선택하세요.', ('강한 어조', '정중한 어조', '부드럽고 완곡한 어조'), key='user_input_style')
 
 content_input_limit = 4
 def click_write_paper():
     if st.session_state.disable_write_paper_1 == False:
-        if (len(user_input_reason) == 0) or (len(user_input_fact) == 0) or (len(user_input_ask) == 0) or (len(user_input_point) == 0) or (len(user_input_receiver) == 0) or (len(user_input_sender) == 0) or (len(user_input_phone) == 0):
+        if (len(st.session_state.user_input_reason) == 0) or (len(st.session_state.user_input_fact) == 0) or (len(st.session_state.user_input_ask) == 0) or (len(st.session_state.user_input_point) == 0) or (len(st.session_state.user_input_receiver) == 0) or (len(st.session_state.user_input_sender) == 0) or (len(st.session_state.user_input_phone) == 0):
             st.session_state.result_answer = "모든 입력란에 내용을 입력 하세요."
-        elif (len(user_input_reason) < content_input_limit) or (len(user_input_fact) < content_input_limit) or (len(user_input_ask) < content_input_limit) or (len(user_input_point) < content_input_limit) or (len(user_input_receiver) < content_input_limit) or (len(user_input_sender) < content_input_limit) or (len(user_input_phone) < content_input_limit):
+        elif (len(st.session_state.user_input_reason) < content_input_limit) or (len(st.session_state.user_input_fact) < content_input_limit) or (len(st.session_state.user_input_ask) < content_input_limit) or (len(st.session_state.user_input_point) < content_input_limit) or (len(st.session_state.user_input_receiver) < content_input_limit) or (len(st.session_state.user_input_sender) < content_input_limit) or (len(st.session_state.user_input_phone) < content_input_limit):
             st.session_state.result_answer = "내용이 너무 짧습니다."
         else:
             st.session_state.disable_write_paper_1 = True
             # hide_main_side 의 셋팅은 타이밍이 중요하다. 화면(사이드바)이 갱신된 후에 변수가 바뀌면 다음 동작까지는 화면이 그대로 있는다.
             st.session_state.hide_main_side = True
             
-            appendix = user_input_appendix
-            if user_input_appendix == None or len(user_input_appendix) == 0:
+            appendix = st.session_state.user_input_appendix
+            if "user_input_appendix" not in st.session_state or len(st.session_state.user_input_appendix) == 0:
                 appendix = "없음"
             
             # when the user clicks on button it will fetch the API
-            user_inputs = {"reason": user_input_reason, "fact": user_input_fact, "ask": user_input_ask, "point": user_input_point, "receiver": user_input_receiver, "sender": user_input_sender, "phone": user_input_phone, "appendix": appendix, "style": user_input_style}
+            user_inputs = {"reason": st.session_state.user_input_reason, "fact": st.session_state.user_input_fact, "ask": st.session_state.user_input_ask, "point": st.session_state.user_input_point, "receiver": st.session_state.user_input_receiver, "sender": st.session_state.user_input_sender, "phone": st.session_state.user_input_phone, "appendix": appendix, "style": st.session_state.user_input_style}
             result = requests.post(url=f"{st.session_state.backend_url}write-paper-1", data=json.dumps(user_inputs))
             rslt = json.loads(json.loads(result.text))
             st.session_state.result_answer = rslt.get('answer')
