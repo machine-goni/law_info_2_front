@@ -1,19 +1,6 @@
-import subprocess
-
-# 필요한 패키지 설치하기
-def install_packages():
-    subprocess.run(["apt-get", "update"])
-    subprocess.run(["apt-get", "install", "-y", "xclip"])
-
-# 설치 함수 호출
-install_packages()
-
-
 import streamlit as st
 #from PIL import Image
 #import time
-
-#import json
 import requests
 
 
@@ -43,10 +30,16 @@ if "job" not in st.session_state:
 # 메인 사이드바를 감출수 있도록 하기위한 플래그
 if "hide_main_side" not in st.session_state:
     st.session_state.hide_main_side = False
+    
+if "result_warning_comment_1" not in st.session_state:
+    st.session_state.result_warning_comment_1 = "작성된 조언은 참고용으로만 사용하시기 바랍니다. 정확하고 적법한 자문은 반드시 법률 자격을 갖춘 전문가와 상의하세요. 또한, 입력한 개인 정보가 유출되지 않도록 주의하시고, 특히 공용PC 등은 사용하지 않으시길 권고합니다."
+    
+if "result_warning_comment_2" not in st.session_state:
+    st.session_state.result_warning_comment_2 = "작성된 내용은 기본적인 초안이므로 활용하시기 전 검증 절차가 필요합니다. 또한, 입력한 개인 정보가 유출되지 않도록 주의하시고, 특히 공용PC 등은 사용하지 않으시길 권고합니다."
 
 # --- 변수 및 back end 초기화 ---
-    
-    
+
+
 #CATEGORIES = [None, "법률 QnA", "서류작성", "절차안내"]
 CATEGORIES = [None, "법률 QnA", "서류작성"]
 

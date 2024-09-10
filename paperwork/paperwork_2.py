@@ -164,7 +164,7 @@ if st.session_state.disable_write_paper_2 == False and len(st.session_state.resu
     st.warning(st.session_state.result_answer)
 elif st.session_state.disable_write_paper_2 and len(st.session_state.result_answer) > 0:
     st.success(st.session_state.result_answer)
-    st.warning("작성된 내용은 기본적인 초안이므로 활용하시기 전 검증 절차가 필요합니다. 또한, 입력한 개인 정보가 유출되지 않도록 주의하시고, 특히 공용PC 등은 사용하지 않으시길 권고합니다.")
+    st.warning(st.session_state.result_warning_comment_2)
     
     # 클립보드 복사
     if st.button(":material/content_copy: Copy"):

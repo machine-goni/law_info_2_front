@@ -4,7 +4,9 @@ import streamlit as st
 import streamlit.components.v1 as components
 import json
 import requests
-import pyperclip    # 클립보드 복사
+#import pyperclip    # 클립보드 복사
+import markdown2
+from bs4 import BeautifulSoup
 
 
 if st.session_state.init_backend == 200 and st.session_state.build != "advice":
@@ -107,10 +109,35 @@ def click_write_paper():
 def click_go_to_main():
     # job 만 비워줘도 버튼이 눌리는 동작과 함께 streamlit_app.py 가 재실행되고 스크립트 끝부분을 통해 start_task 페이지가 실행된다.
     st.session_state.job = None
+    
+    
+def copy_clipboard(markdown_text):
+    # Markdown을 HTML로 변환
+    html_text = markdown2.markdown(markdown_text)
+
+    # HTML을 일반 텍스트로 변환
+    soup = BeautifulSoup(html_text, 'html.parser')
+    plain_text = soup.get_text()
+
+    # HTML과 JavaScript를 사용하여 클립보드 복사 버튼을 생성
+    copy_button = f"""
+        <button onclick="copyToClipboard()"> Copy </button>
+        <script>
+            function copyToClipboard() {{
+                const text = `{plain_text}`;
+                navigator.clipboard.writeText(text).then(function() {{
+                    console.log('Async: Copying to clipboard was successful!');
+                }}, function(err) {{
+                    console.error('Async: Could not copy text: ', err);
+                }});
+            }}
+        </script>
+    """
+    # Streamlit Component에 HTML을 렌더링
+    components.html(copy_button)
 
 
 # 결과 출력
-result_warning_comment = "작성된 조언은 참고용으로만 사용하시기 바랍니다(이용에 대한 책임은 전적으로 사용자에게 있음을 밝힙니다). 정확하고 적법한 자문은 반드시 법률 자격을 갖춘 전문가와 상의하세요. 또한, 입력한 개인 정보가 유출되지 않도록 주의하시고, 특히 공용PC 등은 사용하지 않으시길 권고합니다."
 if st.session_state.disable_advice == 0 and len(st.session_state.result_answer) > 0:
     st.warning(st.session_state.result_answer)
     
@@ -119,7 +146,7 @@ elif st.session_state.disable_advice == 1 and len(st.session_state.result_answer
     st.text("")
     
     st.text_area(label='AI가 요청한 추가 정보를 입력 하세요.', max_chars=500, key='user_input_add_info')
-    st.warning(result_warning_comment)
+    st.warning(st.session_state.result_warning_comment_1)
     
 elif st.session_state.disable_advice == 2 and len(st.session_state.result_answer_post) > 0:
     st.success(st.session_state.result_answer)
@@ -128,14 +155,16 @@ elif st.session_state.disable_advice == 2 and len(st.session_state.result_answer
     st.text(f"추가 정보:\n{st.session_state.input_info_dict.get('add_info')}")
     st.success(st.session_state.result_answer_post)
     st.info("혹시 원하는 답변이 아니라면 단어나 질문을 바꿔서 시도해 보세요.")
-    st.warning(result_warning_comment)
+    st.warning(st.session_state.result_warning_comment_1)
     
     # 클립보드 복사
-    if st.button(":material/content_copy: Copy"):
-        pyperclip.copy(st.session_state.result_answer_post)
-        st.info('복사되었습니다!')
+    #if st.button(":material/content_copy: Copy"):
+    #    pyperclip.copy(st.session_state.result_answer_post)
+    #    st.info('복사되었습니다!')
         
     st.button('처음으로', on_click=click_go_to_main)
+    
+    copy_clipboard(st.session_state.result_answer_post)
         
     st.divider()
     st.info('상담이 필요하지만 상황이 여의치 않을 경우 법률구조법에 따라 설립된 "대한법률구조공단"에서 법률 상담을 받을 수 있습니다.')

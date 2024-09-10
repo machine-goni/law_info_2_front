@@ -129,7 +129,8 @@ elif st.session_state.disable_send_question and len(st.session_state.result_answ
             st.caption('[관련조문]')
             st.text(st.session_state.result_vectordb_choice['ref_article'])
     
-    st.warning("혹시 원하는 답변이 아니라면 단어나 질문을 바꿔서 시도해 보세요.")
+    st.info("혹시 원하는 답변이 아니라면 단어나 질문을 바꿔서 시도해 보세요.")
+    st.warning(st.session_state.result_warning_comment_1)
     st.button('처음으로', on_click=click_go_to_main)
             
 

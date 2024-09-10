@@ -166,7 +166,6 @@ def click_go_to_main():
 
 
 # 결과 출력
-result_warning_comment = "작성된 내용은 기본적인 초안이므로 활용하시기 전 검증 절차가 필요합니다. 또한, 입력한 개인 정보가 유출되지 않도록 주의하시고, 특히 공용PC 등은 사용하지 않으시길 권고합니다."
 if st.session_state.disable_write_paper_5 == 0 and len(st.session_state.result_answer) > 0:
     st.warning(st.session_state.result_answer)
     
@@ -175,7 +174,7 @@ elif st.session_state.disable_write_paper_5 == 1 and len(st.session_state.result
     st.text("")
     
     st.text_area(label='AI가 요청한 추가 정보를 입력 하세요.', max_chars=500, key='user_input_add_info')
-    st.warning(result_warning_comment)
+    st.warning(st.session_state.result_warning_comment_2)
     
 elif st.session_state.disable_write_paper_5 == 2 and len(st.session_state.result_answer_post) > 0:
     st.success(st.session_state.result_answer)
@@ -183,7 +182,7 @@ elif st.session_state.disable_write_paper_5 == 2 and len(st.session_state.result
     
     st.text(f"추가 정보:\n{st.session_state.input_info_dict.get('add_info')}")
     st.success(st.session_state.result_answer_post)
-    st.warning(result_warning_comment)
+    st.warning(st.session_state.result_warning_comment_2)
 
 
 if st.session_state.disable_write_paper_5 == 0 or st.session_state.disable_write_paper_5 == 1:    
