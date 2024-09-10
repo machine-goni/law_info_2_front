@@ -3,7 +3,10 @@
 import streamlit as st
 import json
 import requests
-import pyperclip    # 클립보드 복사
+#import pyperclip    # 클립보드 복사
+import streamlit.components.v1 as components
+import markdown2
+from bs4 import BeautifulSoup
 
 
 if st.session_state.init_backend == 200 and st.session_state.build != "write_paper_2":
@@ -157,6 +160,32 @@ if st.session_state.disable_write_paper_2 == False:
 def click_go_to_main():
     # job 만 비워줘도 버튼이 눌리는 동작과 함께 streamlit_app.py 가 재실행되고 스크립트 끝부분을 통해 start_task 페이지가 실행된다.
     st.session_state.job = None
+    
+    
+def copy_clipboard(markdown_text):
+    # Markdown을 HTML로 변환
+    html_text = markdown2.markdown(markdown_text)
+
+    # HTML을 일반 텍스트로 변환
+    soup = BeautifulSoup(html_text, 'html.parser')
+    plain_text = soup.get_text()
+
+    # HTML과 JavaScript를 사용하여 클립보드 복사 버튼을 생성
+    copy_button = f"""
+        <button onclick="copyToClipboard()"> Copy </button>
+        <script>
+            function copyToClipboard() {{
+                const text = `{plain_text}`;
+                navigator.clipboard.writeText(text).then(function() {{
+                    console.log('Async: Copying to clipboard was successful!');
+                }}, function(err) {{
+                    console.error('Async: Could not copy text: ', err);
+                }});
+            }}
+        </script>
+    """
+    # Streamlit Component에 HTML을 렌더링
+    components.html(copy_button)
 
 
 # 결과 출력
@@ -167,10 +196,12 @@ elif st.session_state.disable_write_paper_2 and len(st.session_state.result_answ
     st.warning(st.session_state.result_warning_comment_2)
     
     # 클립보드 복사
-    if st.button(":material/content_copy: Copy"):
-        pyperclip.copy(st.session_state.result_answer)
-        st.info('복사되었습니다!')
+    #if st.button(":material/content_copy: Copy"):
+    #    pyperclip.copy(st.session_state.result_answer)
+    #    st.info('복사되었습니다!')
         
     # 현시점 유일한 페이지 이동 인터페이스
     st.button('처음으로', on_click=click_go_to_main)
+    
+    copy_clipboard(st.session_state.result_answer)
 
