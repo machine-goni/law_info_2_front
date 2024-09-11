@@ -60,13 +60,14 @@ st.text("")
 if st.session_state.disable_advice == 0:
     st.text_area(label='질문의 배경이 되는 현재의 상황을 상세히 설명해 주세요.', max_chars=1500, key='user_input_status', placeholder="예) 상대방과 금전거래를 한 적이 없는데 상대방이 법원에 물품 대금 10,000,000원에 대한 지급명령신청을 하였습니다.")
     st.text_area(label='현재의 상황에서 궁금하거나 하려고 하는 부분을 입력하세요.', max_chars=500, key='user_input_question', placeholder="예) 어떻게 대응해야 할까요?")
+    container = st.container()
     
 else:
     input_info_title_1 = '<p style="font-family:sans-serif; font-weight:bold; color:gray; font-size: 14px;">입력정보</p>'
     st.markdown(input_info_title_1, unsafe_allow_html=True)
     st.text(f"상황: {st.session_state.input_info_dict.get('status')}")
     st.text(f"질문: {st.session_state.input_info_dict.get('question')}")
-    
+
 
 content_input_limit = 4
 def click_write_paper():
@@ -78,32 +79,36 @@ def click_write_paper():
             st.session_state.result_answer = "내용이 너무 짧습니다."
             
         else:
-            st.session_state.disable_advice = 1
-            st.session_state.hide_main_side = True
-                
-            user_inputs = {"is_post_conversation": False, \
-            "status": st.session_state.user_input_status, "question": st.session_state.user_input_question, \
-            "add_info": "없음"}
-            
-            # 입력정보 저장
-            st.session_state.input_info_dict = user_inputs
-            
-            # when the user clicks on button it will fetch the API
-            result = requests.post(url=f"{st.session_state.backend_url}advice", data=json.dumps(user_inputs))
-            rslt = json.loads(json.loads(result.text))
-            st.session_state.result_answer = rslt.get('answer')
+            with container:
+                with st.spinner('답변하는 중...'):
+                    st.session_state.disable_advice = 1
+                    st.session_state.hide_main_side = True
+                    
+                    user_inputs = {"is_post_conversation": False, \
+                    "status": st.session_state.user_input_status, "question": st.session_state.user_input_question, \
+                    "add_info": "없음"}
+                    
+                    # 입력정보 저장
+                    st.session_state.input_info_dict = user_inputs
+                    
+                    # when the user clicks on button it will fetch the API
+                    result = requests.post(url=f"{st.session_state.backend_url}advice", data=json.dumps(user_inputs))
+                    rslt = json.loads(json.loads(result.text))
+                    st.session_state.result_answer = rslt.get('answer')
             
     elif st.session_state.disable_advice == 1:
-        st.session_state.disable_advice = 2
-        st.session_state.input_info_dict["is_post_conversation"] = True
-        
-        if "user_input_add_info" in st.session_state and len(st.session_state.user_input_add_info) > 0:
-            st.session_state.input_info_dict["add_info"] = st.session_state.user_input_add_info
-        
-        # when the user clicks on button it will fetch the API
-        result = requests.post(url=f"{st.session_state.backend_url}advice", data=json.dumps(st.session_state.input_info_dict))
-        rslt = json.loads(json.loads(result.text))
-        st.session_state.result_answer_post = rslt.get('answer')
+        with container:
+            with st.spinner('답변하는 중...'):
+                st.session_state.disable_advice = 2
+                st.session_state.input_info_dict["is_post_conversation"] = True
+                
+                if "user_input_add_info" in st.session_state and len(st.session_state.user_input_add_info) > 0:
+                    st.session_state.input_info_dict["add_info"] = st.session_state.user_input_add_info
+                
+                # when the user clicks on button it will fetch the API
+                result = requests.post(url=f"{st.session_state.backend_url}advice", data=json.dumps(st.session_state.input_info_dict))
+                rslt = json.loads(json.loads(result.text))
+                st.session_state.result_answer_post = rslt.get('answer')                
         
         
 def click_go_to_main():
@@ -147,6 +152,7 @@ elif st.session_state.disable_advice == 1 and len(st.session_state.result_answer
     
     st.text_area(label='AI가 요청한 추가 정보를 입력 하세요.', max_chars=500, key='user_input_add_info')
     st.warning(st.session_state.result_warning_comment_1)
+    container = st.container()
     
 elif st.session_state.disable_advice == 2 and len(st.session_state.result_answer_post) > 0:
     st.success(st.session_state.result_answer)

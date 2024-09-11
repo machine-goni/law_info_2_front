@@ -94,6 +94,7 @@ if st.session_state.disable_write_paper_5 == 0:
     st.text_input(label='제출할 수 있는 증거 자료가 있다면 콤마(,)로 구분하여 넣으세요.', max_chars=200, key='user_input_evidence', placeholder="예) 문자메세지, 거래 내역서")
     st.text_input(label='같은 내용의 고소장을 이미 접수하거나 제출한 적이 있는지 입력 하세요.', max_chars=100, key='user_input_etc_accuse', placeholder="예) 본 사건과 관련된 형사 사건 수사 없음")
     st.text_input(label='고소장을 제출할 경철서명을 입력 하세요.', max_chars=50, key='user_input_station', placeholder="예) 강남경찰서")
+    container = st.container()
     
 else:
     input_info_title_1 = '<p style="font-family:sans-serif; font-weight:bold; color:gray; font-size: 14px;">입력정보</p>'
@@ -126,41 +127,45 @@ def click_write_paper():
             st.session_state.result_answer = "내용이 너무 짧습니다."
             
         else:
-            st.session_state.disable_write_paper_5 = 1
-            st.session_state.hide_main_side = True
-            
-            receiver_etc = st.session_state.user_input_receiver_etc
-            if "user_input_receiver_etc" not in st.session_state or len(st.session_state.user_input_receiver_etc) == 0:
-                receiver_etc = "없음"
-                
-            evidence = st.session_state.user_input_evidence
-            if "user_input_evidence" not in st.session_state or len(st.session_state.user_input_evidence) == 0:
-                evidence = "없음"
-            
-            user_inputs = {"is_post_conversation": False, "sender_name": st.session_state.user_input_sender_name, "receiver_name": st.session_state.user_input_receiver_name, \
-            "receiver_etc": receiver_etc, "purpose": st.session_state.user_input_purpose, "crime_time": st.session_state.user_input_crime_time, "crime_history": st.session_state.user_input_crime_history, \
-            "damage": st.session_state.user_input_damage, "reason": st.session_state.user_input_reason, "evidence": evidence, \
-            "etc_accuse": st.session_state.user_input_etc_accuse, "station": st.session_state.user_input_station, "add_info": "없음"}
-            
-            # 입력정보 저장
-            st.session_state.input_info_dict = user_inputs
-            
-            # when the user clicks on button it will fetch the API
-            result = requests.post(url=f"{st.session_state.backend_url}write-paper-5", data=json.dumps(user_inputs))
-            rslt = json.loads(json.loads(result.text))
-            st.session_state.result_answer = rslt.get('answer')
+            with container:
+                with st.spinner('답변하는 중...'):
+                    st.session_state.disable_write_paper_5 = 1
+                    st.session_state.hide_main_side = True
+                    
+                    receiver_etc = st.session_state.user_input_receiver_etc
+                    if "user_input_receiver_etc" not in st.session_state or len(st.session_state.user_input_receiver_etc) == 0:
+                        receiver_etc = "없음"
+                        
+                    evidence = st.session_state.user_input_evidence
+                    if "user_input_evidence" not in st.session_state or len(st.session_state.user_input_evidence) == 0:
+                        evidence = "없음"
+                    
+                    user_inputs = {"is_post_conversation": False, "sender_name": st.session_state.user_input_sender_name, "receiver_name": st.session_state.user_input_receiver_name, \
+                    "receiver_etc": receiver_etc, "purpose": st.session_state.user_input_purpose, "crime_time": st.session_state.user_input_crime_time, "crime_history": st.session_state.user_input_crime_history, \
+                    "damage": st.session_state.user_input_damage, "reason": st.session_state.user_input_reason, "evidence": evidence, \
+                    "etc_accuse": st.session_state.user_input_etc_accuse, "station": st.session_state.user_input_station, "add_info": "없음"}
+                    
+                    # 입력정보 저장
+                    st.session_state.input_info_dict = user_inputs
+                    
+                    # when the user clicks on button it will fetch the API
+                    result = requests.post(url=f"{st.session_state.backend_url}write-paper-5", data=json.dumps(user_inputs))
+                    rslt = json.loads(json.loads(result.text))
+                    st.session_state.result_answer = rslt.get('answer')
             
     elif st.session_state.disable_write_paper_5 == 1:
-        st.session_state.disable_write_paper_5 = 2
-        st.session_state.input_info_dict["is_post_conversation"] = True
-        
-        if "user_input_add_info" in st.session_state and len(st.session_state.user_input_add_info) > 0:
-            st.session_state.input_info_dict["add_info"] = st.session_state.user_input_add_info
-        
-        # when the user clicks on button it will fetch the API
-        result = requests.post(url=f"{st.session_state.backend_url}write-paper-5", data=json.dumps(st.session_state.input_info_dict))
-        rslt = json.loads(json.loads(result.text))
-        st.session_state.result_answer_post = rslt.get('answer')
+        with container:
+            with st.spinner('답변하는 중...'):
+                st.session_state.disable_write_paper_5 = 2
+                st.session_state.input_info_dict["is_post_conversation"] = True
+                
+                if "user_input_add_info" in st.session_state and len(st.session_state.user_input_add_info) > 0:
+                    st.session_state.input_info_dict["add_info"] = st.session_state.user_input_add_info
+                
+                # when the user clicks on button it will fetch the API
+                result = requests.post(url=f"{st.session_state.backend_url}write-paper-5", data=json.dumps(st.session_state.input_info_dict))
+                rslt = json.loads(json.loads(result.text))
+                st.session_state.result_answer_post = rslt.get('answer')
         
         
 def click_go_to_main():
@@ -204,6 +209,7 @@ elif st.session_state.disable_write_paper_5 == 1 and len(st.session_state.result
     
     st.text_area(label='AI가 요청한 추가 정보를 입력 하세요.', max_chars=500, key='user_input_add_info')
     st.warning(st.session_state.result_warning_comment_2)
+    container = st.container()
     
 elif st.session_state.disable_write_paper_5 == 2 and len(st.session_state.result_answer_post) > 0:
     st.success(st.session_state.result_answer)

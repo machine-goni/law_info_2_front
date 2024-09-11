@@ -10,8 +10,8 @@ import requests
 def init_backend():
     # 서버가 정상이면 200 을 리턴
     if ("init_backend" not in st.session_state) or st.session_state.init_backend != 200:
-        #st.session_state.backend_url = "http://127.0.0.1:8000/"        
-        st.session_state.backend_url = st.secrets["my_url"]
+        st.session_state.backend_url = "http://127.0.0.1:8000/"        
+        #st.session_state.backend_url = st.secrets["my_url"]
         result = requests.post(url=f"{st.session_state.backend_url}init")
         print(f"init_backend: {result}")    # type: requests.models.Response
         #print(f"requests.models.Response.status_code: {result.status_code}")   # 서버 status code
@@ -101,9 +101,6 @@ def init_global_var():
         
     if "user_input_appendix" in st.session_state:
         st.session_state.user_input_appendix = ""
-        
-    if "user_input_style" in st.session_state:
-        st.session_state.user_input_style = ""
         
     if "user_input_sender_name" in st.session_state:
         st.session_state.user_input_sender_name = ""

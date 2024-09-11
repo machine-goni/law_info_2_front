@@ -107,6 +107,8 @@ st.text_input(label='채권 발생 사유를 입력 하세요.', max_chars=50, k
 st.text_area(label='청구의 구체적인 내용을 입력 하세요.', max_chars=500, key='user_input_ask_reason_detail', placeholder="예) 2024년 4월 5일에 임꺽정이 홍길동에게 10,000,000원을 변제기 2024년 5월 5일로 정하여 빌려주었다. 그러나 홍길동은 전혀 변제하지 않고 있다.")
 
 st.text_input(label='별도로 첨부할 문서가 있다면 문서명을 콤마(,)로 구분하여 넣으세요.', max_chars=200, key='user_input_appendix', placeholder="예) 대여금 계약서(사본), 변제기 약정서(사본) 혹은 없음")
+container = st.container()
+
 
 content_input_limit = 4
 def click_write_paper():
@@ -121,36 +123,38 @@ def click_write_paper():
             st.session_state.result_answer = "내용이 너무 짧습니다."
             
         else:
-            st.session_state.disable_write_paper_2 = True
-            st.session_state.hide_main_side = True
-            
-            appendix = st.session_state.user_input_appendix
-            if "user_input_appendix" not in st.session_state or len(st.session_state.user_input_appendix) == 0:
-                appendix = "없음"
-            
-            amount = None
-            if "user_input_ask_amount" in st.session_state and st.session_state.user_input_ask_amount > 0:
-                amount = format(st.session_state.user_input_ask_amount, ',d') + "원"
-                
-            transmittal_fee = None
-            if "user_input_ask_transmittal_fee" in st.session_state and st.session_state.user_input_ask_transmittal_fee > 0:
-                transmittal_fee = format(st.session_state.user_input_ask_transmittal_fee, ',d') + "원"
-                
-            stamp_fee = None
-            if "user_input_ask_stamp_fee" in st.session_state and st.session_state.user_input_ask_stamp_fee > 0:
-                stamp_fee = format(st.session_state.user_input_ask_stamp_fee, ',d') + "원"
-            
-            # when the user clicks on button it will fetch the API
-            user_inputs = {"sender_name": st.session_state.user_input_sender_name, \
-            "receiver_name": st.session_state.user_input_receiver_name, "court": st.session_state.user_input_court, \
-            "amount": amount, "ask_interest": st.session_state.user_input_ask_interest, \
-            "transmittal_fee": transmittal_fee, "stamp_fee": stamp_fee, \
-            "ask_reason": st.session_state.user_input_ask_reason, "ask_reason_detail": st.session_state.user_input_ask_reason_detail, \
-            "appendix": appendix}
-            
-            result = requests.post(url=f"{st.session_state.backend_url}write-paper-2", data=json.dumps(user_inputs))
-            rslt = json.loads(json.loads(result.text))
-            st.session_state.result_answer = rslt.get('answer')
+            with container:
+                with st.spinner('답변하는 중...'):
+                    st.session_state.disable_write_paper_2 = True
+                    st.session_state.hide_main_side = True
+                    
+                    appendix = st.session_state.user_input_appendix
+                    if "user_input_appendix" not in st.session_state or len(st.session_state.user_input_appendix) == 0:
+                        appendix = "없음"
+                    
+                    amount = None
+                    if "user_input_ask_amount" in st.session_state and st.session_state.user_input_ask_amount > 0:
+                        amount = format(st.session_state.user_input_ask_amount, ',d') + "원"
+                        
+                    transmittal_fee = None
+                    if "user_input_ask_transmittal_fee" in st.session_state and st.session_state.user_input_ask_transmittal_fee > 0:
+                        transmittal_fee = format(st.session_state.user_input_ask_transmittal_fee, ',d') + "원"
+                        
+                    stamp_fee = None
+                    if "user_input_ask_stamp_fee" in st.session_state and st.session_state.user_input_ask_stamp_fee > 0:
+                        stamp_fee = format(st.session_state.user_input_ask_stamp_fee, ',d') + "원"
+                    
+                    # when the user clicks on button it will fetch the API
+                    user_inputs = {"sender_name": st.session_state.user_input_sender_name, \
+                    "receiver_name": st.session_state.user_input_receiver_name, "court": st.session_state.user_input_court, \
+                    "amount": amount, "ask_interest": st.session_state.user_input_ask_interest, \
+                    "transmittal_fee": transmittal_fee, "stamp_fee": stamp_fee, \
+                    "ask_reason": st.session_state.user_input_ask_reason, "ask_reason_detail": st.session_state.user_input_ask_reason_detail, \
+                    "appendix": appendix}
+                    
+                    result = requests.post(url=f"{st.session_state.backend_url}write-paper-2", data=json.dumps(user_inputs))
+                    rslt = json.loads(json.loads(result.text))
+                    st.session_state.result_answer = rslt.get('answer')
             
     
 if st.session_state.disable_write_paper_2 == False:    

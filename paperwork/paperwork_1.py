@@ -84,6 +84,8 @@ st.text_input(label='내용증명을 받을 사람의 이름과 주소를 입력
 
 st.text_input(label='별도로 첨부할 문서가 있다면 문서명을 콤마(,)로 구분하여 넣으세요.', max_chars=200, key='user_input_appendix', placeholder="예) 차용증1, 차용증2 혹은 없음")
 st.selectbox('어조를 선택하세요.', ('강한 어조', '정중한 어조', '부드럽고 완곡한 어조'), key='user_input_style')
+container = st.container()
+
 
 content_input_limit = 4
 def click_write_paper():
@@ -93,19 +95,21 @@ def click_write_paper():
         elif (len(st.session_state.user_input_reason) < content_input_limit) or (len(st.session_state.user_input_fact) < content_input_limit) or (len(st.session_state.user_input_ask) < content_input_limit) or (len(st.session_state.user_input_point) < content_input_limit) or (len(st.session_state.user_input_receiver) < content_input_limit) or (len(st.session_state.user_input_sender) < content_input_limit) or (len(st.session_state.user_input_phone) < content_input_limit):
             st.session_state.result_answer = "내용이 너무 짧습니다."
         else:
-            st.session_state.disable_write_paper_1 = True
-            # hide_main_side 의 셋팅은 타이밍이 중요하다. 화면(사이드바)이 갱신된 후에 변수가 바뀌면 다음 동작까지는 화면이 그대로 있는다.
-            st.session_state.hide_main_side = True
-            
-            appendix = st.session_state.user_input_appendix
-            if "user_input_appendix" not in st.session_state or len(st.session_state.user_input_appendix) == 0:
-                appendix = "없음"
-            
-            # when the user clicks on button it will fetch the API
-            user_inputs = {"reason": st.session_state.user_input_reason, "fact": st.session_state.user_input_fact, "ask": st.session_state.user_input_ask, "point": st.session_state.user_input_point, "receiver": st.session_state.user_input_receiver, "sender": st.session_state.user_input_sender, "phone": st.session_state.user_input_phone, "appendix": appendix, "style": st.session_state.user_input_style}
-            result = requests.post(url=f"{st.session_state.backend_url}write-paper-1", data=json.dumps(user_inputs))
-            rslt = json.loads(json.loads(result.text))
-            st.session_state.result_answer = rslt.get('answer')
+            with container:
+                with st.spinner('답변하는 중...'):
+                    st.session_state.disable_write_paper_1 = True
+                    # hide_main_side 의 셋팅은 타이밍이 중요하다. 화면(사이드바)이 갱신된 후에 변수가 바뀌면 다음 동작까지는 화면이 그대로 있는다.
+                    st.session_state.hide_main_side = True
+                    
+                    appendix = st.session_state.user_input_appendix
+                    if "user_input_appendix" not in st.session_state or len(st.session_state.user_input_appendix) == 0:
+                        appendix = "없음"
+                    
+                    # when the user clicks on button it will fetch the API
+                    user_inputs = {"reason": st.session_state.user_input_reason, "fact": st.session_state.user_input_fact, "ask": st.session_state.user_input_ask, "point": st.session_state.user_input_point, "receiver": st.session_state.user_input_receiver, "sender": st.session_state.user_input_sender, "phone": st.session_state.user_input_phone, "appendix": appendix, "style": st.session_state.user_input_style}
+                    result = requests.post(url=f"{st.session_state.backend_url}write-paper-1", data=json.dumps(user_inputs))
+                    rslt = json.loads(json.loads(result.text))
+                    st.session_state.result_answer = rslt.get('answer')
             
     
 if st.session_state.disable_write_paper_1 == False:    

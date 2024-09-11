@@ -40,7 +40,7 @@ with st.sidebar:
     
     st.divider()
     st.caption("[출처] 여기서 보여지는 판례는 '국가법령정보센터', 통계자료는 'e-나라지표' 에서 제공되었습니다.")
-    
+
 
 new_title = '<p style="font-family:sans-serif; font-weight:bold; color:gray; font-size: 20px;">판례를 기반으로 질문에 답변합니다.</p>'
 st.markdown(new_title, unsafe_allow_html=True)
@@ -49,10 +49,12 @@ st.caption("관련성 있는 판례가 있다면 판례 기반의 답변을, 그
 st.text("")
 
 #case_type = st.selectbox('사건종류를 선택하세요.', ('형사', '민사', '가사', '행정'))
-case_type = st.selectbox('사건종류를 선택하세요.', ('형사', '민사', '가사'))
+st.selectbox('사건종류를 선택하세요.', ('형사', '민사', '가사'), key='case_type')
 st.caption('사건 종류를 정확히 선택하면 관련된 판례를 검색하는 데 도움이 됩니다. 그렇지 않을 경우 답변이 적절하지 않을 수 있습니다.')
 #user_question = st.text_input(label='무엇이 궁금하세요?', max_chars=500)
 st.text_area(label='무엇이 궁금하세요?', max_chars=500, key='user_question')
+# spinner 의 위치를 정하기 위해 st.container 를 사용한다. 아래 st.container 생성 위치가 페이지에서 UI 위치이다. 이거 안해주면 맨 위에 그려진다.
+container = st.container()
 
 
 # 판례 검색 기능은 한번 진입해서 질문하면 더이상 질문할 수 없도록 하기 위해 보내기 버튼의 활성/비활성을 저장해논다
@@ -76,7 +78,8 @@ if "result_etc" not in st.session_state:
     
 if "result_urls" not in st.session_state:
     st.session_state.result_urls = []
-    
+
+
 # 버튼 콜백에서 주의 할점은 input ui 에서 리턴 받은 변수에 값이 들어가는 타이밍 보다 콜백호출이 빠르다(브라우져마다 다른듯).
 # 따라서 user_question = st.text_area 이런식으로 하면 최신 값을 못 얻을때가 있다. 저렇게 쓰지 말고 key를 지정하고 불러와야한다.
 #def click_send_question(arg):  # args 를 넣었다면 이렇게 그냥 받아써주면 된다.
@@ -87,21 +90,24 @@ def click_send_question():
         elif len(st.session_state.user_question) < 10:
             st.session_state.result_answer = "내용이 너무 짧습니다. 좀 더 구체적인 질문이나 상황을 적어 주세요."
         else:
-            st.session_state.disable_send_question = True
-            st.session_state.hide_main_side = True
-            
-            # when the user clicks on button it will fetch the API
-            user_inputs = {"question": st.session_state.user_question, "case_type":case_type}
-            result = requests.post(url=f"{st.session_state.backend_url}question", data=json.dumps(user_inputs))
-            #print(f"click_send_question: {result}")
-            rslt = json.loads(json.loads(result.text))
-            #print(f"rslt is {type(rslt)}")
-            st.session_state.result_answer = rslt.get('answer')
-            st.session_state.result_relevance = rslt.get('relevance')
-            st.session_state.result_vectordb_choice = rslt.get('vectordb_choice')
-            st.session_state.result_etc = rslt.get('etc_relevant_precs')
-            st.session_state.result_urls = rslt.get('statistics_url')
-            #print(f"click_send_question \nrelevance: {st.session_state.result_relevance}, \nvectordb_choice: {st.session_state.result_vectordb_choice}, \netc: {st.session_state.result_etc}")
+            with container:
+                with st.spinner('답변하는 중...'): 
+                    st.session_state.disable_send_question = True
+                    st.session_state.hide_main_side = True
+                    
+                    # when the user clicks on button it will fetch the API
+                    user_inputs = {"question": st.session_state.user_question, "case_type":st.session_state.case_type}
+                    result = requests.post(url=f"{st.session_state.backend_url}question", data=json.dumps(user_inputs))
+                    #print(f"click_send_question: {result}")
+                    rslt = json.loads(json.loads(result.text))
+                    #print(f"rslt is {type(rslt)}")
+                    st.session_state.result_answer = rslt.get('answer')
+                    st.session_state.result_relevance = rslt.get('relevance')
+                    st.session_state.result_vectordb_choice = rslt.get('vectordb_choice')
+                    st.session_state.result_etc = rslt.get('etc_relevant_precs')
+                    st.session_state.result_urls = rslt.get('statistics_url')
+                    #print(f"click_send_question \nrelevance: {st.session_state.result_relevance}, \nvectordb_choice: {st.session_state.result_vectordb_choice}, \netc: {st.session_state.result_etc}")
+
 
 if st.session_state.disable_send_question == False:    
     #st.button('질문하기', key='btn_send_question', on_click=click_send_question, args=('Hi!',), disabled=False)

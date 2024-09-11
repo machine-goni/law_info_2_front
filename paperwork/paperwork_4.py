@@ -98,6 +98,7 @@ if st.session_state.disable_write_paper_4 == 0:
     st.warning("아래는 반박할 내용을 기재 하세요.")
     st.text_area(label='구체적인 사실과 반박 내용을 입력 하세요.', max_chars=500, key='user_input_rebut', placeholder="예) 실제로 돈을 빌린 것은 맞으나 빌린 돈을 갚는 대신 원고의 친구에게 내 차 소유권을 이전 하였음.")
     st.text_input(label='별도로 첨부할 증거 문서가 있다면 문서명을 콤마(,)로 구분하여 넣으세요.', max_chars=200, key='user_input_appendix', placeholder="예) 차량 소유권 이전 증명서, 거래 내역 증명 서류")
+    container = st.container()
     
 else:
     input_info_title_1 = '<p style="font-family:sans-serif; font-weight:bold; color:gray; font-size: 14px;">소장에 대한 입력정보</p>'
@@ -131,44 +132,48 @@ def click_write_paper():
             st.session_state.result_answer = "내용이 너무 짧습니다."
             
         else:
-            st.session_state.disable_write_paper_4 = 1
-            st.session_state.hide_main_side = True
-            
-            case_prove = st.session_state.user_input_case_prove
-            if "user_input_case_prove" not in st.session_state or len(st.session_state.user_input_case_prove) == 0:
-                case_prove = "없음"
-                
-            case_appendix = st.session_state.user_input_case_appendix
-            if "user_input_case_appendix" not in st.session_state or len(st.session_state.user_input_case_appendix) == 0:
-                case_appendix = "없음"
-                
-            appendix = st.session_state.user_input_appendix
-            if "user_input_appendix" not in st.session_state or len(st.session_state.user_input_appendix) == 0:
-                appendix = "없음"
-            
-            user_inputs = {"is_post_conversation": False, "sender_name": st.session_state.user_input_sender_name, "receiver_name": st.session_state.user_input_receiver_name, \
-            "case_no": st.session_state.user_input_case_no, "case_name": st.session_state.user_input_case_name, "case_purpose": st.session_state.user_input_case_purpose, "case_cause": st.session_state.user_input_case_cause, "case_prove": case_prove, "case_appendix": case_appendix, "case_court": st.session_state.user_input_case_court, \
-            "rebut": st.session_state.user_input_rebut, "appendix": appendix, "add_info": "없음"}
-            
-            # 입력정보 저장
-            st.session_state.input_info_dict = user_inputs
-            
-            # when the user clicks on button it will fetch the API
-            result = requests.post(url=f"{st.session_state.backend_url}write-paper-4", data=json.dumps(user_inputs))
-            rslt = json.loads(json.loads(result.text))
-            st.session_state.result_answer = rslt.get('answer')
+            with container:
+                with st.spinner('답변하는 중...'):
+                    st.session_state.disable_write_paper_4 = 1
+                    st.session_state.hide_main_side = True
+                    
+                    case_prove = st.session_state.user_input_case_prove
+                    if "user_input_case_prove" not in st.session_state or len(st.session_state.user_input_case_prove) == 0:
+                        case_prove = "없음"
+                        
+                    case_appendix = st.session_state.user_input_case_appendix
+                    if "user_input_case_appendix" not in st.session_state or len(st.session_state.user_input_case_appendix) == 0:
+                        case_appendix = "없음"
+                        
+                    appendix = st.session_state.user_input_appendix
+                    if "user_input_appendix" not in st.session_state or len(st.session_state.user_input_appendix) == 0:
+                        appendix = "없음"
+                    
+                    user_inputs = {"is_post_conversation": False, "sender_name": st.session_state.user_input_sender_name, "receiver_name": st.session_state.user_input_receiver_name, \
+                    "case_no": st.session_state.user_input_case_no, "case_name": st.session_state.user_input_case_name, "case_purpose": st.session_state.user_input_case_purpose, "case_cause": st.session_state.user_input_case_cause, "case_prove": case_prove, "case_appendix": case_appendix, "case_court": st.session_state.user_input_case_court, \
+                    "rebut": st.session_state.user_input_rebut, "appendix": appendix, "add_info": "없음"}
+                    
+                    # 입력정보 저장
+                    st.session_state.input_info_dict = user_inputs
+                    
+                    # when the user clicks on button it will fetch the API
+                    result = requests.post(url=f"{st.session_state.backend_url}write-paper-4", data=json.dumps(user_inputs))
+                    rslt = json.loads(json.loads(result.text))
+                    st.session_state.result_answer = rslt.get('answer')
             
     elif st.session_state.disable_write_paper_4 == 1:
-        st.session_state.disable_write_paper_4 = 2
-        st.session_state.input_info_dict["is_post_conversation"] = True
-        
-        if "user_input_add_info" in st.session_state and len(st.session_state.user_input_add_info) > 0:
-            st.session_state.input_info_dict["add_info"] = st.session_state.user_input_add_info
-        
-        # when the user clicks on button it will fetch the API
-        result = requests.post(url=f"{st.session_state.backend_url}write-paper-4", data=json.dumps(st.session_state.input_info_dict))
-        rslt = json.loads(json.loads(result.text))
-        st.session_state.result_answer_post = rslt.get('answer')
+        with container:
+            with st.spinner('답변하는 중...'):
+                st.session_state.disable_write_paper_4 = 2
+                st.session_state.input_info_dict["is_post_conversation"] = True
+                
+                if "user_input_add_info" in st.session_state and len(st.session_state.user_input_add_info) > 0:
+                    st.session_state.input_info_dict["add_info"] = st.session_state.user_input_add_info
+                
+                # when the user clicks on button it will fetch the API
+                result = requests.post(url=f"{st.session_state.backend_url}write-paper-4", data=json.dumps(st.session_state.input_info_dict))
+                rslt = json.loads(json.loads(result.text))
+                st.session_state.result_answer_post = rslt.get('answer')
         
         
 def click_go_to_main():
@@ -212,6 +217,7 @@ elif st.session_state.disable_write_paper_4 == 1 and len(st.session_state.result
     
     st.text_area(label='AI가 요청한 추가 정보를 입력 하세요.', max_chars=500, key='user_input_add_info', placeholder="예) 차 소유권 이전을 증명할 차량 등록증이 있고 차량 소유권 이전으로 변제를 대신하기로 합의한 대화문자메세지 있음.")
     st.warning(st.session_state.result_warning_comment_2)
+    container = st.container()
     
 elif st.session_state.disable_write_paper_4 == 2 and len(st.session_state.result_answer_post) > 0:
     st.success(st.session_state.result_answer)
