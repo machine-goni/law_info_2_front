@@ -40,6 +40,19 @@ with st.sidebar:
     
     st.divider()
     st.caption("[출처] 여기서 보여지는 판례는 '국가법령정보센터', 통계자료는 'e-나라지표' 에서 제공되었습니다.")
+    
+
+# iframe 의 width 가 화면사이즈에 맞게 조절되게 하려면 CSS 를 써야 한다.
+st.markdown(
+    """
+    <style>
+    iframe {
+        width: 100%;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 
 new_title = '<p style="font-family:sans-serif; font-weight:bold; color:gray; font-size: 20px;">판례를 기반으로 질문에 답변합니다.</p>'
@@ -143,9 +156,9 @@ elif st.session_state.disable_send_question and len(st.session_state.result_answ
     statistics_result_url = st.session_state.result_urls
     if statistics_result_url != None and len(st.session_state.result_urls) > 0:
         st.divider()
-        components.iframe(statistics_result_url[2], width=700, height=630, scrolling=True)
-        components.iframe(statistics_result_url[0], width=700, height=700, scrolling=True)
-        components.iframe(statistics_result_url[3], width=700, height=700, scrolling=True)
+        components.iframe(statistics_result_url[2], height=630, scrolling=True)
+        components.iframe(statistics_result_url[0], height=700, scrolling=True)
+        components.iframe(statistics_result_url[3], height=700, scrolling=True)
 
 
 #components.html(

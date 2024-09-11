@@ -47,7 +47,19 @@ if "result_answer_post" not in st.session_state:
     
 if "input_info_dict" not in st.session_state:
     st.session_state.input_info_dict = {}
-    
+
+
+st.markdown(
+    """
+    <style>
+    iframe {
+        width: 100%;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 
 new_title = '<p style="font-family:sans-serif; font-weight:bold; color:gray; font-size: 20px;">현재 상황에 대한 법률 조언을 제공합니다.</p>'
 st.markdown(new_title, unsafe_allow_html=True)
@@ -176,8 +188,8 @@ elif st.session_state.disable_advice == 2 and len(st.session_state.result_answer
     st.info('상담이 필요하지만 상황이 여의치 않을 경우 법률구조법에 따라 설립된 "대한법률구조공단"에서 법률 상담을 받을 수 있습니다.')
     st.page_link(f"https://www.klac.or.kr", label="대한법률구조공단 홈페이지", icon=":material/link:")
     #components.iframe(statistics_result_url[2], width=700, height=630, scrolling=True)
-    components.iframe("https://www.index.go.kr/unity/openApi/chartUserShow.do?idntfcId=53B2F01062E204W6&ixCode=2479&statsCode=247901&chartNo=1", width=700, height=700, scrolling=True)
-    components.iframe("https://www.index.go.kr/unity/openApi/meanAnaly.do?idntfcId=53B2F01062E204W6&ixCode=2479", width=700, height=700, scrolling=True)
+    components.iframe("https://www.index.go.kr/unity/openApi/chartUserShow.do?idntfcId=53B2F01062E204W6&ixCode=2479&statsCode=247901&chartNo=1", height=700, scrolling=True)
+    components.iframe("https://www.index.go.kr/unity/openApi/meanAnaly.do?idntfcId=53B2F01062E204W6&ixCode=2479", height=700, scrolling=True)
 
 
 if st.session_state.disable_advice == 0 or st.session_state.disable_advice == 1:    
