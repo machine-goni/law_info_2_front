@@ -9,21 +9,21 @@ import markdown2
 from bs4 import BeautifulSoup
 
 
-if st.session_state.init_backend == 200 and st.session_state.build != "write_paper_2":
-    inputs = {"workflow_type": "write_paper_2"}
-    result = requests.post(url=f"{st.session_state.backend_url}build", data=json.dumps(inputs))
-    if result.status_code == 200:
-        st.session_state.build = "write_paper_2"
+#if st.session_state.init_backend == 200 and st.session_state.build != "write_paper_2":
+#    inputs = {"workflow_type": "write_paper_2"}
+#    result = requests.post(url=f"{st.session_state.backend_url}build", data=json.dumps(inputs))
+#    if result.status_code == 200:
+#        st.session_state.build = "write_paper_2"
     
-elif st.session_state.init_backend != 200 and st.session_state.build != "write_paper_2":
-    init_result = requests.post(url=f"{st.session_state.backend_url}init")
-    st.session_state.init_backend = init_result.status_code
+#elif st.session_state.init_backend != 200 and st.session_state.build != "write_paper_2":
+#    init_result = requests.post(url=f"{st.session_state.backend_url}init")
+#    st.session_state.init_backend = init_result.status_code
     
-    if st.session_state.init_backend == 200:
-        inputs = {"workflow_type": "write_paper_2"}
-        result = requests.post(url=f"{st.session_state.backend_url}build", data=json.dumps(inputs))
-        if result.status_code == 200:
-            st.session_state.build = "write_paper_2"
+#    if st.session_state.init_backend == 200:
+#        inputs = {"workflow_type": "write_paper_2"}
+#        result = requests.post(url=f"{st.session_state.backend_url}build", data=json.dumps(inputs))
+#        if result.status_code == 200:
+#            st.session_state.build = "write_paper_2"
 
 
 if "disable_write_paper_2" not in st.session_state:
@@ -108,6 +108,7 @@ st.text_area(label='청구의 구체적인 내용을 입력 하세요.', max_cha
 
 st.text_input(label='별도로 첨부할 문서가 있다면 문서명을 콤마(,)로 구분하여 넣으세요.', max_chars=200, key='user_input_appendix', placeholder="예) 대여금 계약서(사본), 변제기 약정서(사본) 혹은 없음")
 container = st.container()
+container.empty()
 
 
 content_input_limit = 4

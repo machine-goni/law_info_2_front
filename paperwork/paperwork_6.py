@@ -9,21 +9,21 @@ import markdown2
 from bs4 import BeautifulSoup
 
 
-if st.session_state.init_backend == 200 and st.session_state.build != "write_paper_6":
-    inputs = {"workflow_type": "write_paper_6"}
-    result = requests.post(url=f"{st.session_state.backend_url}build", data=json.dumps(inputs))
-    if result.status_code == 200:
-        st.session_state.build = "write_paper_6"
+#if st.session_state.init_backend == 200 and st.session_state.build != "write_paper_6":
+#    inputs = {"workflow_type": "write_paper_6"}
+#    result = requests.post(url=f"{st.session_state.backend_url}build", data=json.dumps(inputs))
+#    if result.status_code == 200:
+#        st.session_state.build = "write_paper_6"
     
-elif st.session_state.init_backend != 200 and st.session_state.build != "write_paper_6":
-    init_result = requests.post(url=f"{st.session_state.backend_url}init")
-    st.session_state.init_backend = init_result.status_code
+#elif st.session_state.init_backend != 200 and st.session_state.build != "write_paper_6":
+#    init_result = requests.post(url=f"{st.session_state.backend_url}init")
+#    st.session_state.init_backend = init_result.status_code
     
-    if st.session_state.init_backend == 200:
-        inputs = {"workflow_type": "write_paper_6"}
-        result = requests.post(url=f"{st.session_state.backend_url}build", data=json.dumps(inputs))
-        if result.status_code == 200:
-            st.session_state.build = "write_paper_6"
+#    if st.session_state.init_backend == 200:
+#        inputs = {"workflow_type": "write_paper_6"}
+#        result = requests.post(url=f"{st.session_state.backend_url}build", data=json.dumps(inputs))
+#        if result.status_code == 200:
+#            st.session_state.build = "write_paper_6"
 
 
 if "disable_write_paper_6" not in st.session_state:
@@ -104,6 +104,7 @@ if st.session_state.disable_write_paper_6 == 0:
     st.text_input(label='위에서 기술한 청구원인을 입증할 증거가 있다면 콤마(,)로 구분하여 넣으세요.', max_chars=200, key='user_input_evidence', placeholder="예) 문자메세지, 차용증")
     st.text_input(label='제출할 관할법원을 입력 하세요. 위 안내에따라 [대한민국법원 전자소송 - 관할법원 찾기]를 이용하세요.', max_chars=20, key='user_input_court', placeholder="예) 서울중앙지방법원")
     container = st.container()
+    container.empty()
     
 else:
     input_info_title_1 = '<p style="font-family:sans-serif; font-weight:bold; color:gray; font-size: 14px;">입력정보</p>'
@@ -138,7 +139,7 @@ def click_write_paper():
                     if "user_input_evidence" not in st.session_state or len(st.session_state.user_input_evidence) == 0:
                         evidence = "없음"
                     
-                    user_inputs = {"is_post_conversation": False, "sender_name": st.session_state.user_input_sender_name, "receiver_name": st.session_state.user_input_receiver_name, \
+                    user_inputs = {"dialogue_session_id": st.session_state.dialogue_session_id, "is_post_conversation": False, "sender_name": st.session_state.user_input_sender_name, "receiver_name": st.session_state.user_input_receiver_name, \
                     "case_name": st.session_state.user_input_case_name, "purpose": st.session_state.user_input_purpose, "reason": st.session_state.user_input_reason, "evidence": evidence, \
                     "court": st.session_state.user_input_court, "add_info": "없음"}
                     
@@ -207,6 +208,7 @@ elif st.session_state.disable_write_paper_6 == 1 and len(st.session_state.result
     st.text_area(label='AI가 요청한 추가 정보를 입력 하세요.', max_chars=500, key='user_input_add_info')
     st.warning(st.session_state.result_warning_comment_2)
     container = st.container()
+    container.empty()
     
 elif st.session_state.disable_write_paper_6 == 2 and len(st.session_state.result_answer_post) > 0:
     st.success(st.session_state.result_answer)

@@ -9,21 +9,21 @@ import markdown2
 from bs4 import BeautifulSoup
 
 
-if st.session_state.init_backend == 200 and st.session_state.build != "write_paper_4":
-    inputs = {"workflow_type": "write_paper_4"}
-    result = requests.post(url=f"{st.session_state.backend_url}build", data=json.dumps(inputs))
-    if result.status_code == 200:
-        st.session_state.build = "write_paper_4"
+#if st.session_state.init_backend == 200 and st.session_state.build != "write_paper_4":
+#    inputs = {"workflow_type": "write_paper_4"}
+#    result = requests.post(url=f"{st.session_state.backend_url}build", data=json.dumps(inputs))
+#    if result.status_code == 200:
+#        st.session_state.build = "write_paper_4"
     
-elif st.session_state.init_backend != 200 and st.session_state.build != "write_paper_4":
-    init_result = requests.post(url=f"{st.session_state.backend_url}init")
-    st.session_state.init_backend = init_result.status_code
+#elif st.session_state.init_backend != 200 and st.session_state.build != "write_paper_4":
+#    init_result = requests.post(url=f"{st.session_state.backend_url}init")
+#    st.session_state.init_backend = init_result.status_code
     
-    if st.session_state.init_backend == 200:
-        inputs = {"workflow_type": "write_paper_4"}
-        result = requests.post(url=f"{st.session_state.backend_url}build", data=json.dumps(inputs))
-        if result.status_code == 200:
-            st.session_state.build = "write_paper_4"
+#    if st.session_state.init_backend == 200:
+#        inputs = {"workflow_type": "write_paper_4"}
+#        result = requests.post(url=f"{st.session_state.backend_url}build", data=json.dumps(inputs))
+#        if result.status_code == 200:
+#            st.session_state.build = "write_paper_4"
 
 
 if "disable_write_paper_4" not in st.session_state:
@@ -99,6 +99,7 @@ if st.session_state.disable_write_paper_4 == 0:
     st.text_area(label='구체적인 사실과 반박 내용을 입력 하세요.', max_chars=500, key='user_input_rebut', placeholder="예) 실제로 돈을 빌린 것은 맞으나 빌린 돈을 갚는 대신 원고의 친구에게 내 차 소유권을 이전 하였음.")
     st.text_input(label='별도로 첨부할 증거 문서가 있다면 문서명을 콤마(,)로 구분하여 넣으세요.', max_chars=200, key='user_input_appendix', placeholder="예) 차량 소유권 이전 증명서, 거래 내역 증명 서류")
     container = st.container()
+    container.empty()
     
 else:
     input_info_title_1 = '<p style="font-family:sans-serif; font-weight:bold; color:gray; font-size: 14px;">소장에 대한 입력정보</p>'
@@ -149,7 +150,7 @@ def click_write_paper():
                     if "user_input_appendix" not in st.session_state or len(st.session_state.user_input_appendix) == 0:
                         appendix = "없음"
                     
-                    user_inputs = {"is_post_conversation": False, "sender_name": st.session_state.user_input_sender_name, "receiver_name": st.session_state.user_input_receiver_name, \
+                    user_inputs = {"dialogue_session_id": st.session_state.dialogue_session_id, "is_post_conversation": False, "sender_name": st.session_state.user_input_sender_name, "receiver_name": st.session_state.user_input_receiver_name, \
                     "case_no": st.session_state.user_input_case_no, "case_name": st.session_state.user_input_case_name, "case_purpose": st.session_state.user_input_case_purpose, "case_cause": st.session_state.user_input_case_cause, "case_prove": case_prove, "case_appendix": case_appendix, "case_court": st.session_state.user_input_case_court, \
                     "rebut": st.session_state.user_input_rebut, "appendix": appendix, "add_info": "없음"}
                     
@@ -218,6 +219,7 @@ elif st.session_state.disable_write_paper_4 == 1 and len(st.session_state.result
     st.text_area(label='AI가 요청한 추가 정보를 입력 하세요.', max_chars=500, key='user_input_add_info', placeholder="예) 차 소유권 이전을 증명할 차량 등록증이 있고 차량 소유권 이전으로 변제를 대신하기로 합의한 대화문자메세지 있음.")
     st.warning(st.session_state.result_warning_comment_2)
     container = st.container()
+    container.empty()
     
 elif st.session_state.disable_write_paper_4 == 2 and len(st.session_state.result_answer_post) > 0:
     st.success(st.session_state.result_answer)

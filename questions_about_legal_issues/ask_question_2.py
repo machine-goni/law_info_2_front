@@ -9,21 +9,21 @@ import markdown2
 from bs4 import BeautifulSoup
 
 
-if st.session_state.init_backend == 200 and st.session_state.build != "advice":
-    inputs = {"workflow_type": "advice"}
-    result = requests.post(url=f"{st.session_state.backend_url}build", data=json.dumps(inputs))
-    if result.status_code == 200:
-        st.session_state.build = "advice"
+#if st.session_state.init_backend == 200 and st.session_state.build != "advice":
+#    inputs = {"workflow_type": "advice"}
+#    result = requests.post(url=f"{st.session_state.backend_url}build", data=json.dumps(inputs))
+#    if result.status_code == 200:
+#        st.session_state.build = "advice"
     
-elif st.session_state.init_backend != 200 and st.session_state.build != "advice":
-    init_result = requests.post(url=f"{st.session_state.backend_url}init")
-    st.session_state.init_backend = init_result.status_code
+#elif st.session_state.init_backend != 200 and st.session_state.build != "advice":
+#    init_result = requests.post(url=f"{st.session_state.backend_url}init")
+#    st.session_state.init_backend = init_result.status_code
     
-    if st.session_state.init_backend == 200:
-        inputs = {"workflow_type": "advice"}
-        result = requests.post(url=f"{st.session_state.backend_url}build", data=json.dumps(inputs))
-        if result.status_code == 200:
-            st.session_state.build = "advice"
+#    if st.session_state.init_backend == 200:
+#        inputs = {"workflow_type": "advice"}
+#        result = requests.post(url=f"{st.session_state.backend_url}build", data=json.dumps(inputs))
+#        if result.status_code == 200:
+#            st.session_state.build = "advice"
 
 
 # 사이드바
@@ -73,6 +73,7 @@ if st.session_state.disable_advice == 0:
     st.text_area(label='질문의 배경이 되는 현재의 상황을 상세히 설명해 주세요.', max_chars=1500, key='user_input_status', placeholder="예) 상대방과 금전거래를 한 적이 없는데 상대방이 법원에 물품 대금 10,000,000원에 대한 지급명령신청을 하였습니다.")
     st.text_area(label='현재의 상황에서 궁금하거나 하려고 하는 부분을 입력하세요.', max_chars=500, key='user_input_question', placeholder="예) 어떻게 대응해야 할까요?")
     container = st.container()
+    container.empty()
     
 else:
     input_info_title_1 = '<p style="font-family:sans-serif; font-weight:bold; color:gray; font-size: 14px;">입력정보</p>'
@@ -96,7 +97,7 @@ def click_write_paper():
                     st.session_state.disable_advice = 1
                     st.session_state.hide_main_side = True
                     
-                    user_inputs = {"is_post_conversation": False, \
+                    user_inputs = {"dialogue_session_id": st.session_state.dialogue_session_id, "is_post_conversation": False, \
                     "status": st.session_state.user_input_status, "question": st.session_state.user_input_question, \
                     "add_info": "없음"}
                     
@@ -165,6 +166,7 @@ elif st.session_state.disable_advice == 1 and len(st.session_state.result_answer
     st.text_area(label='AI가 요청한 추가 정보를 입력 하세요.', max_chars=500, key='user_input_add_info')
     st.warning(st.session_state.result_warning_comment_1)
     container = st.container()
+    container.empty()
     
 elif st.session_state.disable_advice == 2 and len(st.session_state.result_answer_post) > 0:
     st.success(st.session_state.result_answer)

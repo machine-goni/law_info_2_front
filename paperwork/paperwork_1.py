@@ -9,21 +9,21 @@ import markdown2
 from bs4 import BeautifulSoup
 
 
-if st.session_state.init_backend == 200 and st.session_state.build != "write_paper_1":
-    inputs = {"workflow_type": "write_paper_1"}
-    result = requests.post(url=f"{st.session_state.backend_url}build", data=json.dumps(inputs))
-    if result.status_code == 200:
-        st.session_state.build = "write_paper_1"
+#if st.session_state.init_backend == 200 and st.session_state.build != "write_paper_1":
+#    inputs = {"workflow_type": "write_paper_1"}
+#    result = requests.post(url=f"{st.session_state.backend_url}build", data=json.dumps(inputs))
+#    if result.status_code == 200:
+#        st.session_state.build = "write_paper_1"
     
-elif st.session_state.init_backend != 200 and st.session_state.build != "write_paper_1":
-    init_result = requests.post(url=f"{st.session_state.backend_url}init")
-    st.session_state.init_backend = init_result.status_code
+#elif st.session_state.init_backend != 200 and st.session_state.build != "write_paper_1":
+#    init_result = requests.post(url=f"{st.session_state.backend_url}init")
+#    st.session_state.init_backend = init_result.status_code
     
-    if st.session_state.init_backend == 200:
-        inputs = {"workflow_type": "write_paper_1"}
-        result = requests.post(url=f"{st.session_state.backend_url}build", data=json.dumps(inputs))
-        if result.status_code == 200:
-            st.session_state.build = "write_paper_1"
+#    if st.session_state.init_backend == 200:
+#        inputs = {"workflow_type": "write_paper_1"}
+#        result = requests.post(url=f"{st.session_state.backend_url}build", data=json.dumps(inputs))
+#        if result.status_code == 200:
+#            st.session_state.build = "write_paper_1"
 
 
 if "disable_write_paper_1" not in st.session_state:
@@ -85,6 +85,7 @@ st.text_input(label='내용증명을 받을 사람의 이름과 주소를 입력
 st.text_input(label='별도로 첨부할 문서가 있다면 문서명을 콤마(,)로 구분하여 넣으세요.', max_chars=200, key='user_input_appendix', placeholder="예) 차용증1, 차용증2 혹은 없음")
 st.selectbox('어조를 선택하세요.', ('강한 어조', '정중한 어조', '부드럽고 완곡한 어조'), key='user_input_style')
 container = st.container()
+container.empty()
 
 
 content_input_limit = 4

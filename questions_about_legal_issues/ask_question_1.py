@@ -6,26 +6,27 @@ import json
 import requests
 
 
+# 서버에서의 프로세스 수정으로 주석처리
 # build_workflow 는 작업마다 다르게 호출해 준다.
 # 이렇게 체크를 해주지 않으면 기능이 실행될때마다 계속 리퀘스트를 날리고 workflow 를 새로 build 해버린다.
-if st.session_state.init_backend == 200 and st.session_state.build != "rag":
-    inputs = {"workflow_type": "rag"}
-    result = requests.post(url=f"{st.session_state.backend_url}build", data=json.dumps(inputs))
+#if st.session_state.init_backend == 200 and st.session_state.build != "rag":
+#    inputs = {"workflow_type": "rag"}
+#    result = requests.post(url=f"{st.session_state.backend_url}build", data=json.dumps(inputs))
     #print(f"build result.status_code: {result.status_code}")
-    if result.status_code == 200:
+#    if result.status_code == 200:
         # 왜 그런진 알 수 없지만 아래처럼 str(result.text) 넣어도 if 문에서 "rag" 와 다른걸로 나온다. 그래서 "rag" 를 그대로 넣어준다.
         #st.session_state.build = str(result.text)
-        st.session_state.build = "rag"
+#        st.session_state.build = "rag"
     
-elif st.session_state.init_backend != 200 and st.session_state.build != "rag":
-    init_result = requests.post(url=f"{st.session_state.backend_url}init")
-    st.session_state.init_backend = init_result.status_code
+#elif st.session_state.init_backend != 200 and st.session_state.build != "rag":
+#    init_result = requests.post(url=f"{st.session_state.backend_url}init")
+#    st.session_state.init_backend = init_result.status_code
     
-    if st.session_state.init_backend == 200:
-        inputs = {"workflow_type": "rag"}
-        result = requests.post(url=f"{st.session_state.backend_url}build", data=json.dumps(inputs))
-        if result.status_code == 200:
-            st.session_state.build = "rag"
+#    if st.session_state.init_backend == 200:
+#        inputs = {"workflow_type": "rag"}
+#        result = requests.post(url=f"{st.session_state.backend_url}build", data=json.dumps(inputs))
+#        if result.status_code == 200:
+#            st.session_state.build = "rag"
 
 
 # 사이드바
@@ -68,6 +69,7 @@ st.caption('사건 종류를 정확히 선택하면 관련된 판례를 검색�
 st.text_area(label='무엇이 궁금하세요?', max_chars=500, key='user_question')
 # spinner 의 위치를 정하기 위해 st.container 를 사용한다. 아래 st.container 생성 위치가 페이지에서 UI 위치이다. 이거 안해주면 맨 위에 그려진다.
 container = st.container()
+container.empty()
 
 
 # 판례 검색 기능은 한번 진입해서 질문하면 더이상 질문할 수 없도록 하기 위해 보내기 버튼의 활성/비활성을 저장해논다

@@ -1,6 +1,6 @@
 import streamlit as st
 #from PIL import Image
-#import time
+import datetime
 import requests
 
 
@@ -21,11 +21,14 @@ def init_backend():
 init_backend()
 
 
-if "build" not in st.session_state:    
-    st.session_state.build = None
+#if "build" not in st.session_state:    
+#    st.session_state.build = None
 
 if "job" not in st.session_state:
     st.session_state.job = None
+    
+if "dialogue_session_id" not in st.session_state:
+    st.session_state.dialogue_session_id = None
 
 # 메인 사이드바를 감출수 있도록 하기위한 플래그
 if "hide_main_side" not in st.session_state:
@@ -52,6 +55,7 @@ CATEGORIES = [None, "법률 QnA", "서류작성"]
 def init_global_var():
     st.session_state.job = None
     st.session_state.hide_main_side = False
+    st.session_state.dialogue_session_id = None
         
     st.session_state.result_answer = ""
     st.session_state.result_answer_post = ""
@@ -195,6 +199,15 @@ def start_task():
             init_backend()
             #st.toast('Your edited image was saved!', icon='😍')
         else:
+            # epoch time 으로 dialogue_session_id 생성
+            now = datetime.datetime.now()
+            timestamp = now.timestamp()
+            st.session_state.dialogue_session_id = str(timestamp)
+            #one_hour_later = now + datetime.timedelta(hours=1)
+            #print(f"start_task - timestamp: {st.session_state.dialogue_session_id}")   # 출력 예: 1726045120.690278
+            #print(f"one_hour_later: {one_hour_later.timestamp()}")                     # 출력 예: 1726048720.690278
+            #print(f"diff timestamp: {one_hour_later.timestamp() - timestamp}")         # 출력 예: 3600.0
+            
             st.session_state.job = job
             if job != None:
                 #print(f"job: {job}, {type(job)}")
