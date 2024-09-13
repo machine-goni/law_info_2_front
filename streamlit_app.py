@@ -7,22 +7,13 @@ import requests
 # --- 변수 및 back end 초기화 ---
 # 전역은 st.session_state 에 key 를 만들어 넣어주면 된다.
 
-def init_backend():
-    # 서버가 정상이면 200 을 리턴
-    if ("init_backend" not in st.session_state) or st.session_state.init_backend != 200:
-        #st.session_state.backend_url = "http://127.0.0.1:8000/"        
-        st.session_state.backend_url = st.secrets["my_url"]
-        result = requests.post(url=f"{st.session_state.backend_url}init")
-        print(f"init_backend: {result}")    # type: requests.models.Response
-        #print(f"requests.models.Response.status_code: {result.status_code}")   # 서버 status code
-        #print(f"requests.models.Response.text: {result.text}")                 # 함수 리턴
-        st.session_state.init_backend = result.status_code
-
-init_backend()
-
 
 #if "build" not in st.session_state:    
 #    st.session_state.build = None
+
+if "backend_url" not in st.session_state:
+    #st.session_state.backend_url = "http://127.0.0.1:8000/"        
+    st.session_state.backend_url = st.secrets["my_url"]
 
 if "job" not in st.session_state:
     st.session_state.job = None
@@ -39,6 +30,18 @@ if "result_warning_comment_1" not in st.session_state:
     
 if "result_warning_comment_2" not in st.session_state:
     st.session_state.result_warning_comment_2 = "작성된 내용은 기본적인 초안이므로 활용하시기 전 검증 절차가 필요합니다. 또한, 입력한 개인 정보가 유출되지 않도록 주의하시고, 특히 공용PC 등은 사용하지 않으시길 권고합니다."
+    
+    
+def init_backend():
+    # 서버가 정상이면 200 을 리턴
+    if ("init_backend" not in st.session_state) or st.session_state.init_backend != 200:
+        result = requests.post(url=f"{st.session_state.backend_url}init")
+        print(f"init_backend: {result}")    # type: requests.models.Response
+        #print(f"requests.models.Response.status_code: {result.status_code}")   # 서버 status code
+        #print(f"requests.models.Response.text: {result.text}")                 # 함수 리턴
+        st.session_state.init_backend = result.status_code
+
+init_backend()
 
 # --- 변수 및 back end 초기화 ---
 
