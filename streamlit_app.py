@@ -285,6 +285,28 @@ st.logo("images/logo_550x55.png", icon_image="images/courthouse_256_white.png")
 st.title("AI 법률 도우미")
 st.info("당신의 법률 문제를 도와드립니다!")
 st.caption("[주의] 본 서비스는 법률문제에 대해 누구나 쉽게 접근하는 것을 목적으로 만들어졌으며, 일반적인 조언을 제공함으로써 상황을 좀 더 잘 이해할 수 있도록 돕습니다. 하지만 본 서비스가 실제 변호사나 법률 자격이 있는 것은 아니므로 조언의 이용에 대한 책임은 전적으로 사용자에게 있으며 참고용으로만 사용하시기 바랍니다. 정확하고 적법한 자문은 반드시 법률 자격을 갖춘 전문가와 상의하세요.")
+
+# kakao adfit
+kakao_adfit = """
+<style>
+    .adfit-container {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        text-align: center;
+    }
+</style>
+
+<div class="adfit-container">
+    <ins class="kakao_ad_area" style="display:none;width:100%;"
+	data-ad-unit = "DAN-hQpUDnckvfjqi2tK"
+	data-ad-width = "320"
+	data-ad-height = "100"></ins>
+    <script async type="text/javascript" charset="utf-8" src="https://t1.daumcdn.net/kas/static/ba.min.js"></script>
+</div>
+"""
+st.components.v1.html(kakao_adfit)
+
 st.divider()
 st.text("")
 
