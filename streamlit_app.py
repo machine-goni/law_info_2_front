@@ -293,7 +293,12 @@ kakao_adfit = """
         position: fixed;
         bottom: 0;
         width: 100%;
+        height: auto;
         text-align: center;
+        
+        white-space: normal; /* 추가 */
+        word-wrap: break-word; /* 추가 */
+        overflow: hidden; /* 추가 */
     }
 </style>
 
