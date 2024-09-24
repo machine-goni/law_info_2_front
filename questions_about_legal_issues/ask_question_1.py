@@ -34,7 +34,7 @@ with st.sidebar:
     st.header('국가법령정보센터')
     #work_type = st.selectbox('작업종류를 선택하세요.', ('법률관련 질문', '법적절차 정보', '서류 작성'))
     
-    st.page_link(f"https://www.law.go.kr/lsSc.do?menuId=1&subMenuId=15&tabMenuId=81&eventGubun=060114", label="법령 찾기", icon=":material/link:")
+    st.page_link(f"https://www.law.go.kr/lsSc.do?menuId=1&subMenuId=15&tabMenuId=81&eventGubun=060114", label="법령(법조문) 찾기", icon=":material/link:")
     st.page_link(f"https://www.law.go.kr/lsTrmSc.do?menuId=13&subMenuId=65", label="법령용어찾기", icon=":material/link:")
     #legal_word = st.text_input(label='법령용어찾기', max_chars=20)
     #st.link_button(label="찾기", url=f"https://www.law.go.kr/lsTrmSc.do?menuId=13&subMenuId=65&query={legal_word}")
@@ -140,15 +140,18 @@ if st.session_state.disable_send_question == False and len(st.session_state.resu
 elif st.session_state.disable_send_question and len(st.session_state.result_answer) > 0:
     st.success(st.session_state.result_answer)
     
+    #print(f"st.session_state.result_vectordb_choice: {st.session_state.result_vectordb_choice}")
+    
     # 판례 링크, 참조 조문
     if st.session_state.result_relevance and st.session_state.result_vectordb_choice != None and "prec_no" in st.session_state.result_vectordb_choice:
         st.caption('[판례보기] 아래 사건번호를 누르면 검색된 판례전문을 볼 수 있습니다.')
         st.page_link(f"https://www.law.go.kr/DRF/lawService.do?OC=xivaroma&target=prec&ID={st.session_state.result_vectordb_choice['prec_no']}&type=html", label=st.session_state.result_vectordb_choice['case_no'], icon=":material/link:")
-        
-        if "ref_article" in st.session_state.result_vectordb_choice:
-            st.text("")
-            st.caption('[관련조문]')
-            st.text(st.session_state.result_vectordb_choice['ref_article'])
+            
+    if st.session_state.result_vectordb_choice != None and "ref_article" in st.session_state.result_vectordb_choice:
+        st.text("")
+        st.caption('[관련조문]')
+        st.text(st.session_state.result_vectordb_choice['ref_article'])
+        #print(f"ref_article: {st.session_state.result_vectordb_choice['ref_article']}")
     
     st.info("혹시 원하는 답변이 아니라면 단어나 질문을 바꿔서 시도해 보세요.")
     st.warning(st.session_state.result_warning_comment_1)
