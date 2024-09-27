@@ -12,8 +12,8 @@ import requests
 #    st.session_state.build = None
 
 if "backend_url" not in st.session_state:
-    #st.session_state.backend_url = "http://127.0.0.1:8000/"        
-    st.session_state.backend_url = st.secrets["my_url"]
+    st.session_state.backend_url = "http://127.0.0.1:8000/"        
+    #st.session_state.backend_url = st.secrets["my_url"]
 
 if "job" not in st.session_state:
     st.session_state.job = None
