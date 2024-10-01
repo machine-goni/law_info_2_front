@@ -114,7 +114,7 @@ def click_send_question():
                     user_inputs = {"question": st.session_state.user_question, "case_type":st.session_state.case_type}
                     result = requests.post(url=f"{st.session_state.backend_url}question", data=json.dumps(user_inputs))
                     #print(f"click_send_question: {result}")
-                    rslt = json.loads(json.loads(result.text))
+                    rslt = json.loads(result.text)
                     #print(f"rslt is {type(rslt)}")
                     st.session_state.result_answer = rslt.get('answer')
                     st.session_state.result_relevance = rslt.get('relevance')

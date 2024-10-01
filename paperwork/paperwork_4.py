@@ -159,7 +159,7 @@ def click_write_paper():
                     
                     # when the user clicks on button it will fetch the API
                     result = requests.post(url=f"{st.session_state.backend_url}write-paper-4", data=json.dumps(user_inputs))
-                    rslt = json.loads(json.loads(result.text))
+                    rslt = json.loads(result.text)
                     st.session_state.result_answer = rslt.get('answer')
             
     elif st.session_state.disable_write_paper_4 == 1:
@@ -173,7 +173,7 @@ def click_write_paper():
                 
                 # when the user clicks on button it will fetch the API
                 result = requests.post(url=f"{st.session_state.backend_url}write-paper-4", data=json.dumps(st.session_state.input_info_dict))
-                rslt = json.loads(json.loads(result.text))
+                rslt = json.loads(result.text)
                 st.session_state.result_answer_post = rslt.get('answer')
         
         

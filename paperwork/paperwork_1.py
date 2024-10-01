@@ -109,7 +109,7 @@ def click_write_paper():
                     # when the user clicks on button it will fetch the API
                     user_inputs = {"reason": st.session_state.user_input_reason, "fact": st.session_state.user_input_fact, "ask": st.session_state.user_input_ask, "point": st.session_state.user_input_point, "receiver": st.session_state.user_input_receiver, "sender": st.session_state.user_input_sender, "phone": st.session_state.user_input_phone, "appendix": appendix, "style": st.session_state.user_input_style}
                     result = requests.post(url=f"{st.session_state.backend_url}write-paper-1", data=json.dumps(user_inputs))
-                    rslt = json.loads(json.loads(result.text))
+                    rslt = json.loads(result.text)
                     st.session_state.result_answer = rslt.get('answer')
             
     

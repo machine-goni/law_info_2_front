@@ -154,7 +154,7 @@ def click_write_paper():
                     "appendix": appendix}
                     
                     result = requests.post(url=f"{st.session_state.backend_url}write-paper-2", data=json.dumps(user_inputs))
-                    rslt = json.loads(json.loads(result.text))
+                    rslt = json.loads(result.text)
                     st.session_state.result_answer = rslt.get('answer')
             
     
