@@ -354,7 +354,7 @@ if st.session_state.job == None:
 #'''
 #For running the streamlit server we need to run the following command:
 #streamlit run streamlit_app.py
-#If you want to use a specific port number, enter it like this: streamlit run streamlit_app.py --server.port 8501.
+#If you want to use a specific port number, enter it like this: streamlit run streamlit_app.py --server.port 8501
 
 #It will launch the app in the browser, you can go to http://localhost:8501 The web app
 #Press CTRL+C to quit

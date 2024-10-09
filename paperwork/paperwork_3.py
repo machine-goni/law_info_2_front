@@ -5,21 +5,21 @@ import json
 import requests
 
 
-if st.session_state.init_backend == 200 and st.session_state.build != "write_paper_3":
-    inputs = {"workflow_type": "write_paper_3"}
-    result = requests.post(url=f"{st.session_state.backend_url}build", data=json.dumps(inputs))
-    if result.status_code == 200:
-        st.session_state.build = "write_paper_3"
+#if st.session_state.init_backend == 200 and st.session_state.build != "write_paper_3":
+#    inputs = {"workflow_type": "write_paper_3"}
+#    result = requests.post(url=f"{st.session_state.backend_url}build", data=json.dumps(inputs))
+#    if result.status_code == 200:
+#        st.session_state.build = "write_paper_3"
     
-elif st.session_state.init_backend != 200 and st.session_state.build != "write_paper_3":
-    init_result = requests.post(url=f"{st.session_state.backend_url}init")
-    st.session_state.init_backend = init_result.status_code
+#elif st.session_state.init_backend != 200 and st.session_state.build != "write_paper_3":
+#    init_result = requests.post(url=f"{st.session_state.backend_url}init")
+#    st.session_state.init_backend = init_result.status_code
     
-    if st.session_state.init_backend == 200:
-        inputs = {"workflow_type": "write_paper_3"}
-        result = requests.post(url=f"{st.session_state.backend_url}build", data=json.dumps(inputs))
-        if result.status_code == 200:
-            st.session_state.build = "write_paper_3"
+#    if st.session_state.init_backend == 200:
+#        inputs = {"workflow_type": "write_paper_3"}
+#        result = requests.post(url=f"{st.session_state.backend_url}build", data=json.dumps(inputs))
+#        if result.status_code == 200:
+#            st.session_state.build = "write_paper_3"
     
 if "result_answer" not in st.session_state:
     st.session_state.result_answer = ""
